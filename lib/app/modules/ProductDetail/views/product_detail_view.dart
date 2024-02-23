@@ -1,0 +1,161 @@
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+import 'package:getwidget/components/button/gf_button.dart';
+import 'package:getwidget/getwidget.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:lottie/lottie.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:counter_button/counter_button.dart';
+import '../controllers/product_detail_controller.dart';
+
+class ProductDetailView extends GetView<ProductDetailController> {
+  const ProductDetailView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Vx.gray100,
+      appBar: AppBar(
+        title: const Text('Comparer'),
+        backgroundColor: Colors.white,
+        titleTextStyle: const TextStyle(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
+        elevation: 0,
+      ),
+      body: VStack([
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: VStack([
+            "${controller.product['nom']}"
+                .upperCamelCase
+                .text
+                .color(Vx.red500)
+                .bold
+                .make(),
+            5.heightBox,
+            Image.network(
+              controller.product["image"],
+              height: 120,
+            ).centered()
+          ]),
+        ).backgroundColor(Vx.white).w(Get.width).h(Get.height / 10 * 2.5),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: HStack(
+            [
+              "Unité".text.color(Vx.gray400).make(),
+              "${controller.product['unite']}"
+                  .text
+                  .color(Vx.gray800)
+                  .bold
+                  .make()
+            ],
+            alignment: MainAxisAlignment.spaceBetween,
+          ).w(double.maxFinite),
+        ).backgroundColor(Vx.white),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: HStack(
+            [
+              "Quantité".text.color(Vx.gray400).size(18).make(),
+              Obx(() => CounterButton(
+                    count: controller.count(),
+                    loading: false,
+                    onChange: controller.count,
+                  ))
+            ],
+            alignment: MainAxisAlignment.spaceBetween,
+          ).w(double.maxFinite),
+        ).backgroundColor(Vx.white),
+        10.heightBox,
+        "Vos magasins".text.make().paddingAll(10),
+        Container(
+          child: Obx(() => controller.propositions().isEmpty
+              ?  Center(
+                  child: controller.proposition_loading.value
+                      ? SizedBox(child: Lottie.asset("images/product_loading.json"),)
+                      : Text("Aucune proposition pour cet article")
+                )
+              : VStack(controller
+                      .propositions()
+                      .map((e) => getPropositionCard(e))
+                      .toList())
+                  .scrollVertical()
+                  .h(double.maxFinite)),
+        ).pSymmetric(h: 10).expand()
+      ]),
+    );
+  }
+
+  Widget getPropositionCard(Map<String, dynamic> proposition) {
+    return Container(
+
+      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.only(top: 5),
+      child: HStack(
+        [
+          Image.network(
+            proposition["boutique_id"]["image"],
+            width: 50,
+          ),
+          "${proposition['prix']}f/${controller.product["unite"]}"
+              .text
+              .size(10)
+              .bold
+              .color(Vx.red500)
+              .make(),
+          "${controller.product['is_actif'] ? 'En stock' : 'Stock Epuisé'}"
+              .text
+              .size(10)
+              .color(Vx.green500)
+              .make(),
+          const LineIcon.shoppingBasket(
+            color: Vx.yellow500,
+          ).p(5).cornerRadius(7).backgroundColor(Vx.gray200).onTap(
+              ()=> controller.addCommandeToBacket(proposition['id'])
+          ),
+          const LineIcon.phone(
+            color: Vx.green700,
+          ).p(5).cornerRadius(7).backgroundColor(Vx.gray200)
+            .onTap((){
+              print(proposition);
+              Get.bottomSheet(VStack([
+                HStack([
+                  Image.network(
+                    proposition["boutique_id"]["image"],
+                    width: 90,
+                  ),
+                  5.widthBox,
+                  VStack([
+                    "${proposition["boutique_id"]["nom"]}".text.size(18).bold.make(),
+                    5.heightBox,
+                    "${proposition["boutique_id"]["contact"]}".text.gray500.bold.make(),
+                    "${proposition["boutique_id"]["email"] ?? ""}".text.gray500.bold.make(),
+                    "${proposition["boutique_id"]["ville"] ?? ""}, ${proposition["boutique_id"]["quartier"] ?? ""}".text.gray500.bold.make(),
+                  ])
+                ]),
+                15.heightBox,
+                GFButton(
+                  onPressed: ()=> launchUrl(new Uri(scheme: "tel", path: proposition['boutique_id']['contact'])),
+                  blockButton: true,
+                  icon: LineIcon.phone(color: Vx.white,),
+                  color: Get.theme.primaryColor,
+                  child: "Appeler".text.white.make(),
+                ).centered()
+              ]).card.white.topRounded(value: 7).make());
+            }),
+          const LineIcon.mapMarker(
+            color: Vx.red500,
+          ).p(5).cornerRadius(7).backgroundColor(Vx.gray200).onTap(() {
+            var url =
+                "https://www.google.ci/maps/@${proposition['boutique_id']['lat']},${proposition['boutique_id']['lng']},12z?hl=fr&entry=ttu";
+            launchUrl(Uri.parse(url));
+          }),
+        ],
+        alignment: MainAxisAlignment.spaceBetween,
+      ),
+    ).backgroundColor(Colors.white).w(double.maxFinite).card.make();
+  }
+}
