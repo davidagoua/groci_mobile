@@ -62,13 +62,15 @@ class BasketView extends GetView {
           ).p(10).card.make()).toList(),
 
         if (controller.boutiques().isEmpty)
-          Center(child: SizedBox(
-            height: Get.height,
-            child: VStack([
-              Lottie.asset("images/paniervide.json")
-            ], alignment: MainAxisAlignment.center,),
-          ),)
+          getEmptyStateWidget()
       ]).scrollVertical()),
+    );
+  }
+
+  Widget getEmptyStateWidget(){
+    return Container(
+      alignment: Alignment.center,
+      child: Lottie.network("https://c-moinscher.ci/images/paniervide.json"),
     );
   }
 }

@@ -16,24 +16,9 @@ class AcceuilView extends GetView<AcceuilController> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: VStack([
-        VStack(
-          [
-            HStack(
-              [
-                Image.asset("images/amoirie.png").h(30),
-                Image.asset("images/group.png").h(30)
-              ],
-              alignment: MainAxisAlignment.spaceBetween,
-            ).w(double.maxFinite),
-            Image.asset("images/logo.jpg").h(40),
-          ],
-          alignment: MainAxisAlignment.center,
-          crossAlignment: CrossAxisAlignment.center,
-        )
-            .h(Get.height / 10 * 1.3)
-            .w(double.maxFinite)
-            .backgroundColor(Colors.white)
-            .marginSymmetric(horizontal: 25),
+
+        getHeader(),
+
         getCategorieWidget(),
         10.heightBox,
         getSearchesBox(),
@@ -162,5 +147,29 @@ class AcceuilView extends GetView<AcceuilController> {
       ]),
     ).card.white.make().onTap(() =>
         Get.toNamed(Routes.PRODUCT_DETAIL, arguments: {"product": produit}));
+  }
+
+  Widget getHeader(){
+    return Container(
+      child: VStack([
+         HStack(
+          [
+            Container(
+              child: Image.asset("images/amoirie.png"),
+            ).h(30),
+            Container(
+              child: Image.asset("images/group.png"),
+            ).h(30),
+
+          ],
+          alignment: MainAxisAlignment.spaceBetween,
+        ).w(double.maxFinite)
+        ,
+        5.heightBox,
+        Container(
+          child: Image.asset("images/logo.jpg"),
+        ).h(50),
+      ], crossAlignment: CrossAxisAlignment.center,).p(15).backgroundColor(Vx.white),
+    );
   }
 }

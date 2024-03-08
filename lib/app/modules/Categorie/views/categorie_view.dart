@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:getwidget/components/loader/gf_loader.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:groci/app/modules/Acceuil/controllers/acceuil_controller.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -17,49 +20,70 @@ class CategorieView extends GetView<CategorieController> {
 
     return Scaffold(
       backgroundColor: Vx.gray100 ,
-      body: VStack([
-        VStack([
-          HStack(
+      body: Container(
+        child: VStack([
+           getHeader(),
+
+          Obx(() => controller.categories().isEmpty
+            ? Center(child: SizedBox(child: Lottie.asset("images/product_loading.json"),),)
+            : GridView.count(
+            crossAxisCount: 3,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            children: controller.categories().map((e) => Container(
+
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 15, vertical: 5),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(7)),
+              child: VStack(
+                [
+                  Image.network(e['image']).h(40),
+                  5.heightBox,
+                  "${e['nom']}".text.size(10).align(TextAlign.center).make().centered()
+                ],
+                alignment: MainAxisAlignment.center,
+                crossAlignment: CrossAxisAlignment.center,
+              ),
+            ).cornerRadius(5).onTap(() {
+              HomeController controller = Get.find<HomeController>();
+              AcceuilController acceuilController = Get.find<AcceuilController>();
+              acceuilController.fetchProducts(categorie_id: e['id']);
+              controller.index(1);
+            })).toList(),
+          ).h(Get.height / 10 * 8).marginOnly(top: 5))
+        ]).scrollVertical(),
+      ),
+    );
+  }
+
+  Widget getHeader(){
+    return Container(
+        child: VStack([
+          Obx(()=>  !controller.load.value ? GFLoader(type: GFLoaderType.ios,) : HStack(
             [
-              Image.asset("images/amoirie.png").h(30),
-              Image.asset("images/group.png").h(30)
+              CachedNetworkImage(
+                imageUrl: "https://c-moinscher.ci/images/amoirie.png",
+                placeholder: (context, url) => const GFLoader(type: GFLoaderType.ios,),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ).h(30),
+              CachedNetworkImage(
+                imageUrl: "https://c-moinscher.ci/images/group.png",
+                placeholder: (context, url) => const GFLoader(type: GFLoaderType.ios,),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ).h(30),
             ],
             alignment: MainAxisAlignment.spaceBetween,
-          ).w(double.maxFinite),
+          ).w(double.maxFinite))
+          ,
           5.heightBox,
-          Image.asset("images/logo.jpg").h(50),
-        ], crossAlignment: CrossAxisAlignment.center,).h(Get.height / 10 * 1.5).p(15).backgroundColor(Vx.white),
-
-        Obx(() => controller.categories().isEmpty
-          ? Center(child: SizedBox(child: Lottie.asset("images/product_loading.json"),),)
-          : GridView.count(
-          crossAxisCount: 3,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 5,
-          children: controller.categories().map((e) => Container(
-
-            padding: const EdgeInsets.symmetric(
-                horizontal: 15, vertical: 5),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(7)),
-            child: VStack(
-              [
-                Image.network(e['image']).h(40),
-                5.heightBox,
-                "${e['nom']}".text.size(10).align(TextAlign.center).make().centered()
-              ],
-              alignment: MainAxisAlignment.center,
-              crossAlignment: CrossAxisAlignment.center,
-            ),
-          ).cornerRadius(5).onTap(() {
-            HomeController controller = Get.find<HomeController>();
-            AcceuilController acceuilController = Get.find<AcceuilController>();
-            acceuilController.fetchProducts(categorie_id: e['id']);
-            controller.index(1);
-          })).toList(),
-        ).h(Get.height / 10 * 7).marginOnly(top: 5).scrollVertical())
-      ]),
+          CachedNetworkImage(
+            imageUrl: "https://c-moinscher.ci/images/logo.jpg",
+            placeholder: (context, url) => GFLoader(type: GFLoaderType.ios,),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+          ).h(50),
+        ], crossAlignment: CrossAxisAlignment.center,).p(15).backgroundColor(Vx.white),
     );
   }
 }

@@ -40,7 +40,9 @@ class ProfileView extends GetView<ProfileController> {
                 type: GFButtonType.outline,
                 borderSide: BorderSide(color: Vx.black),
                 color: Get.theme.primaryColor,
-                onPressed: ()=>{},
+                onPressed: ()=>{
+                  Get.bottomSheet(updateContactWidget())
+                },
                 child: "Modifier mon numero de téléphone".text.bold.make(),
               ).centered(),
 
@@ -80,6 +82,34 @@ class ProfileView extends GetView<ProfileController> {
         "info@c-moinscger.ci".text.make(),
         "c-moinscher.ci".text.make(),
       ], alignment: MainAxisAlignment.center, crossAlignment: CrossAxisAlignment.center,).w(double.maxFinite),
+    );
+  }
+
+  Widget updateContactWidget(){
+    return Container(
+      height: Get.height / 10 * 4,
+      padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+      color: Colors.white,
+      child: Form(
+        child: VStack([
+          TextFormField(
+            keyboardType: TextInputType.phone,
+            controller: controller.contactCtrl,
+            decoration: InputDecoration(
+              hintText: "Entrez votre contact"
+            ),
+          ),
+          5.heightBox,
+          GFButton(
+            onPressed: controller.updateContact,
+            type: GFButtonType.solid,
+            size: GFSize.LARGE,
+            blockButton: true,
+            color: Get.theme.primaryColor,
+            text: "Enregistrer",
+          )
+        ], crossAlignment: CrossAxisAlignment.center,),
+      ),
     );
   }
 }

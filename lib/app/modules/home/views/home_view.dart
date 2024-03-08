@@ -39,8 +39,6 @@ class HomeView extends GetView<HomeController> {
   
   Widget getBottomBar(BuildContext context){
 
-
-
     return BottomNavigationBar(
       items: [
         const BottomNavigationBarItem(icon: Icon(Icons.menu_open), label: "Menu"),

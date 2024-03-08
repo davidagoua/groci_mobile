@@ -15,16 +15,7 @@ class LandingView extends GetView<LandingController> {
     return Scaffold(
       body: SafeArea(
         child: ZStack([
-          Container(
-            height: Get.height,
-            width: Get.width,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(
-                      "images/splash_back.png",
-                    ),
-                    fit: BoxFit.fill)),
-          ),
+          getBackground(),
           VStack([
             50.heightBox,
             Container(child: Image.asset("images/logo_front.png").centered()),
@@ -82,4 +73,15 @@ class LandingView extends GetView<LandingController> {
       ),
     );
   }
+
+  Widget getBackground() => Container(
+    height: Get.height,
+    width: Get.width,
+    decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage(
+              "images/splash_back.png",
+            ),
+            fit: BoxFit.fill)),
+  );
 }

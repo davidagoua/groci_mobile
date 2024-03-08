@@ -37,7 +37,6 @@ class CoreProvider extends GetConnect {
         "Accept":"application/json"
       }
     );
-    print(response);
     return response;
   }
 }

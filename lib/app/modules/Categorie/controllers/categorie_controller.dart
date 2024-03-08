@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../data/core_provider.dart';
@@ -5,6 +6,9 @@ import '../../../data/core_provider.dart';
 class CategorieController extends GetxController {
 
   final categories = [].obs;
+  final load = false.obs;
+  final  image1 = "images/amoirie.png".obs;
+  final  image2 = Image.asset("images/group.png").obs;
 
 
   void fetchCategories({int? id}){
@@ -21,6 +25,10 @@ class CategorieController extends GetxController {
   void onInit() {
     super.onInit();
     fetchCategories();
+
+    Future.delayed(const Duration(milliseconds: 100), ()=>{
+      load.value = true
+    });
   }
 
   @override

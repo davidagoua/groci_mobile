@@ -7,11 +7,8 @@ import 'app/routes/app_pages.dart';
 
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-
 
   bool initial = prefs.getBool('SHOW_ONBOARDING') ?? true;
 
