@@ -13,18 +13,12 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Get.theme.primaryColor,
-        title: const Text('Profil'),
-        centerTitle: true,
-      ),
       body: VStack([
         Container(
           padding: EdgeInsets.all(30),
           color: Get.theme.primaryColor,
           child: Center(
-            child: Icon(Icons.supervised_user_circle_sharp, size: 80,).circle(backgroundColor: Vx.white,),
+            child: Icon(Icons.supervised_user_circle_sharp, size: 80, color: Get.theme.primaryColor).circle(backgroundColor: Vx.white,),
           ),
         ).h(Get.height / 10 * 2),
         Container(
@@ -36,9 +30,8 @@ class ProfileView extends GetView<ProfileController> {
               Obx(() => "${controller.contact}".text.make().centered()),
               10.heightBox,
               GFButton(
-                elevation: 0,
-                type: GFButtonType.outline,
-                borderSide: BorderSide(color: Vx.black),
+                elevation: 5,
+                textColor: Colors.white,
                 color: Get.theme.primaryColor,
                 onPressed: ()=>{
                   Get.bottomSheet(updateContactWidget())

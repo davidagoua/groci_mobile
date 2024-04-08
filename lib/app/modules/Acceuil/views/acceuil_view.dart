@@ -45,7 +45,7 @@ class AcceuilView extends GetView<AcceuilController> {
                     .categories()
                     .map((e) => Container(
                   margin: const EdgeInsets.symmetric(
-                      vertical: 10, horizontal: 15),
+                      vertical: 10, horizontal: 5),
                   padding: const EdgeInsets.symmetric(
                       horizontal: 15, vertical: 20),
                   decoration: BoxDecoration(
@@ -65,7 +65,7 @@ class AcceuilView extends GetView<AcceuilController> {
                     .toList(),
               ).scrollHorizontal()
             ])),
-    ).h(Get.height / 10 * 2).w(double.maxFinite);
+    ).h(Get.height / 10 * 1.8).w(double.maxFinite);
   }
 
   Widget getSearchesBox() {
@@ -137,7 +137,7 @@ class AcceuilView extends GetView<AcceuilController> {
   Widget getProductListCart(Map<String, dynamic> produit) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      leading: Image.network(produit["image"]),
+      leading: Image.network(produit["image"]).card.make(),
       title: "${produit['nom']}".text.bold.size(17).make(),
       subtitle: "${produit['unite']}".text.gray500.size(15).make(),
       trailing: VStack([

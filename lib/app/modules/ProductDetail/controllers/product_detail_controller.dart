@@ -9,7 +9,7 @@ import '../../../data/core_provider.dart';
 class ProductDetailController extends GetxController {
   //TODO: Implement ProductDetailController
 
-  final count = 0.obs;
+  final count = 1.obs;
   dynamic product = {};
   final proposition_loading = false.obs;
   final propositions = [].obs;

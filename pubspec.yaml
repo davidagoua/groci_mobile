@@ -20,6 +20,9 @@ dependencies:
   icons_launcher: 2.1.7
   lottie: 2.7.0
   cached_network_image: 3.3.1
+  stylish_bottom_bar:
+  flutter_barcode_scanner:
+  animate_do:
   flutter: 
     sdk: flutter
 

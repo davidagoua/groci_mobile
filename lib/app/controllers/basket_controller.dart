@@ -7,7 +7,9 @@ class BasketController extends GetxController {
   final commandes = <String, int>{}.obs;
   final CoreProvider coreProvider = CoreProvider();
   final boutiques = [].obs;
-
+  final total = 0.obs;
+  final oneLoading = false.obs;
+  final showIndex = null;
 
   @override
   void onInit() {
@@ -18,6 +20,9 @@ class BasketController extends GetxController {
   void updateBasket() async {
     final response = await coreProvider.getresume({'commandes': commandes});
     boutiques.value = response.body!['boutiques'];
+
+    // calculer le total
+    total.value = boutiques.sumBy((p0) => p0['prix_total']);
   }
 
   void addCommande(int proposition_id, int quantite, {String? product_name}) async {
@@ -33,6 +38,13 @@ class BasketController extends GetxController {
   void clearCommande(){
     boutiques([]);
     commandes({});
-    print("Boutique listener: ${boutiques.value.length}");
+    total.value = 0;
+  }
+
+  void removeProposition(int proposition_id){
+    this.oneLoading.value = true;
+    commandes.remove(proposition_id.toString());
+    updateBasket();
+    this.oneLoading.value = false;
   }
 }
