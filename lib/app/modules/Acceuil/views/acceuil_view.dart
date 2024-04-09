@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -19,7 +20,7 @@ class AcceuilView extends GetView<AcceuilController> {
 
         getHeader(),
 
-        getCategorieWidget(),
+        Obx(() => controller.showCategorie.value ? ZoomIn(child: getCategorieWidget(), duration: Duration(milliseconds: 300),) : 0.heightBox),
         10.heightBox,
         getSearchesBox(),
         10.heightBox,
@@ -74,6 +75,7 @@ class AcceuilView extends GetView<AcceuilController> {
       child: FormBuilder(
         key: controller.formKey,
         child: VStack([
+          /*
           Obx(() => FormBuilderDropdown<String>(
                 name: 'villes',
                 decoration: const InputDecoration(
@@ -87,8 +89,11 @@ class AcceuilView extends GetView<AcceuilController> {
                   );
                 }).toList(),
               )),
+
+           */
           5.heightBox,
           FormBuilderTextField(
+            focusNode: controller.searchFocus,
             name: 'query',
             onChanged: (value) {
               controller.search(value);
@@ -128,25 +133,30 @@ class AcceuilView extends GetView<AcceuilController> {
                             .products()
                             .map((e) => getProductListCart(e))
                             .toList())
-                        .scrollVertical(),
+                        .scrollVertical(physics: BouncingScrollPhysics()),
               )),
       ).w(double.maxFinite),
     );
   }
 
   Widget getProductListCart(Map<String, dynamic> produit) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      leading: Image.network(produit["image"]).card.make(),
-      title: "${produit['nom']}".text.bold.size(17).make(),
-      subtitle: "${produit['unite']}".text.gray500.size(15).make(),
-      trailing: VStack([
-        produit['min_price'] == null
-            ? "Aucune".text.green700.size(10).make()
-            : "${produit['min_price']}f".text.size(10).color(Vx.gray500).make()
-      ]),
-    ).card.white.make().onTap(() =>
-        Get.toNamed(Routes.PRODUCT_DETAIL, arguments: {"product": produit}));
+    return Container(
+      key: Key("acceuil_product_${produit['id']}"),
+      color: Colors.white,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        leading: Image.network(produit["image"]).card.make(),
+        title: "${produit['nom']}".text.bold.size(17).make(),
+        subtitle: "${produit['unite']}".text.gray500.size(15).make(),
+        trailing: VStack([
+          produit['min_price'] == null
+              ? "Aucune".text.green700.size(10).make()
+              : "${produit['min_price']}f".text.size(10).color(Vx.gray500).make()
+        ]),
+      ).card.make().onTap(()  {
+          Get.toNamed(Routes.PRODUCT_DETAIL, arguments: {"product": produit});
+      }),
+    );
   }
 
   Widget getHeader(){

@@ -18,11 +18,22 @@ class BasketController extends GetxController {
 
 
   void updateBasket() async {
-    final response = await coreProvider.getresume({'commandes': commandes});
-    boutiques.value = response.body!['boutiques'];
+    try {
+      final response = await coreProvider.getresume({'commandes': commandes});
+      boutiques.value = response.body?['boutiques'] ?? <dynamic>[];
+      // calculer le total
+      if(boutiques.value.isNotEmpty){
+        total.value = boutiques.sumBy((p0) => p0['prix_total']);
+      }else{
+        total(0);
+        commandes({});
+      }
 
-    // calculer le total
-    total.value = boutiques.sumBy((p0) => p0['prix_total']);
+    }on Exception catch(e ){
+        total.value = 0;
+        boutiques.value = [];
+    }
+
   }
 
   void addCommande(int proposition_id, int quantite, {String? product_name}) async {

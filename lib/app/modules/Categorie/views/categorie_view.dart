@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -31,34 +32,36 @@ class CategorieView extends GetView<CategorieController> {
               crossAxisCount: 3,
               crossAxisSpacing: 5,
               mainAxisSpacing: 5,
-              children: controller.categories().map((e) => Container(
-
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 15, vertical: 5),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(7)),
-                child: VStack(
-                  [
-                    Image.network(e['image']).h(40),
-                    5.heightBox,
-                    "${e['nom']}".text.size(10).align(TextAlign.center).make().centered()
-                  ],
-                  alignment: MainAxisAlignment.center,
-                  crossAlignment: CrossAxisAlignment.center,
-                ),
-              ).cornerRadius(5).onTap(() {
-                HomeController controller = Get.find<HomeController>();
-                AcceuilController acceuilController = Get.find<AcceuilController>();
-                acceuilController.fetchProducts(categorie_id: e['id']);
-                controller.index(1);
-              })).toList(),
+              children: controller.categories().map((e) => BounceInUp(
+                child: Container(
+                
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15, vertical: 5),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(7)),
+                  child: VStack(
+                    [
+                      Image.network(e['image']).h(40),
+                      5.heightBox,
+                      "${e['nom']}".text.size(10).align(TextAlign.center).make().centered()
+                    ],
+                    alignment: MainAxisAlignment.center,
+                    crossAlignment: CrossAxisAlignment.center,
+                  ),
+                ).cornerRadius(5).onTap(() {
+                  HomeController controller = Get.find<HomeController>();
+                  AcceuilController acceuilController = Get.find<AcceuilController>();
+                  acceuilController.fetchProducts(categorie_id: e['id']);
+                  controller.index(1);
+                }),
+              )).toList(),
 
             ).expand(),
               110.heightBox
             ]).h(Get.height / 10 * 8.5).marginOnly(top: 5)).pOnly(bottom: 20),
 
-        ]).scrollVertical(),
+        ]).scrollVertical(physics: BouncingScrollPhysics()),
       ),
     );
   }

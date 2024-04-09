@@ -39,9 +39,8 @@ class LandingView extends GetView<LandingController> {
                 [
                   "Suivant".text.white.make(),
                   10.widthBox,
-                  ShakeY(
+                  Pulse(
                     infinite: true,
-                    from: 10,
                     child: LineIcon.angleRight(
                       size: 30,
                       color: Vx.red500,

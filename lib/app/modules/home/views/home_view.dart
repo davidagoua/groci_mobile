@@ -81,7 +81,7 @@ class HomeView extends GetView<HomeController> {
           title: "Panier".text.make(),
           selectedColor: Get.theme.primaryColor
         ),
-        BottomBarItem(icon: LineIcon.userCircle(), title: "Profile".text.make(), selectedColor: Get.theme.primaryColor),
+        BottomBarItem(icon: LineIcon.user(), title: "Profile".text.make(), selectedColor: Get.theme.primaryColor),
       ],
       currentIndex: controller.index.value,
       onTap: controller.index,

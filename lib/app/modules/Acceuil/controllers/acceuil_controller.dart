@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
@@ -5,11 +6,13 @@ import 'package:groci/app/data/core_provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class AcceuilController extends GetxController {
+  final FocusNode searchFocus = FocusNode();
   final categories = [].obs;
   final products = [].obs;
   final query_ctl = TextEditingController();
   final search = "".obs;
   final selectedCategorie = <String, dynamic>{"nom":"Produits vivrier", "id":  1}.obs;
+  final showCategorie = true.obs;
 
   final product_loading = false.obs;
   final formKey = GlobalKey<FormBuilderState>();
@@ -28,7 +31,13 @@ class AcceuilController extends GetxController {
     fetchProducts();
     fetchVilles();
 
-
+    searchFocus.addListener(() {
+      if(searchFocus.hasFocus){
+        showCategorie.value = false;
+      }else{
+        showCategorie.value = true;
+      }
+    });
   }
 
   void fetchProducts({int? categorie_id = 5}) async {

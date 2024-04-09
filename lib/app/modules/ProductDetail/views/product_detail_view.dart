@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -28,7 +29,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: VStack([
-            "${controller.product['nom']}"
+            "${controller.product['nom']} / ${controller.product['unite']}"
                 .upperCamelCase
                 .text
                 .color(Vx.red500)
@@ -70,7 +71,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
           ).w(double.maxFinite),
         ).backgroundColor(Vx.white),
         10.heightBox,
-        "Vos magasins".text.make().paddingAll(10),
+        "Vos boutiques".text.make().paddingAll(10),
         Container(
           child: Obx(() => controller.propositions().isEmpty
               ?  Center(
@@ -90,72 +91,81 @@ class ProductDetailView extends GetView<ProductDetailController> {
   }
 
   Widget getPropositionCard(Map<String, dynamic> proposition) {
-    return Container(
+    return BounceInLeft(
+      from: 15,
+      child: Container(
 
-      padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.only(top: 5),
-      child: HStack(
-        [
-          Image.network(
-            proposition["boutique_id"]["image"],
-            width: 50,
-          ),
-          "${proposition['prix']}f/${controller.product["unite"]}"
-              .text
-              .size(10)
-              .bold
-              .color(Vx.red500)
-              .make(),
-          "${controller.product['is_actif'] ? 'En stock' : 'Stock Epuisé'}"
-              .text
-              .size(10)
-              .color(Vx.green500)
-              .make(),
-          const LineIcon.shoppingBasket(
-            color: Vx.yellow500,
-          ).p(5).cornerRadius(7).backgroundColor(Vx.gray200).onTap(
-              ()=> controller.addCommandeToBacket(proposition['id'])
-          ),
-          const LineIcon.phone(
-            color: Vx.green700,
-          ).p(5).cornerRadius(7).backgroundColor(Vx.gray200)
-            .onTap((){
-              print(proposition);
-              Get.bottomSheet(VStack([
-                HStack([
-                  Image.network(
-                    proposition["boutique_id"]["image"],
-                    width: 90,
-                  ),
-                  5.widthBox,
-                  VStack([
-                    "${proposition["boutique_id"]["nom"]}".text.size(18).bold.make(),
-                    5.heightBox,
-                    "${proposition["boutique_id"]["contact"]}".text.gray500.bold.make(),
-                    "${proposition["boutique_id"]["email"] ?? ""}".text.gray500.bold.make(),
-                    "${proposition["boutique_id"]["ville"] ?? ""}, ${proposition["boutique_id"]["quartier"] ?? ""}".text.gray500.bold.make(),
-                  ])
-                ]),
-                15.heightBox,
-                GFButton(
-                  onPressed: ()=> launchUrl(new Uri(scheme: "tel", path: proposition['boutique_id']['contact'])),
-                  blockButton: true,
-                  icon: LineIcon.phone(color: Vx.white,),
-                  color: Get.theme.primaryColor,
-                  child: "Appeler".text.white.make(),
-                ).centered()
-              ]).card.white.topRounded(value: 7).make());
-            }),
-          const LineIcon.mapMarker(
-            color: Vx.red500,
-          ).p(5).cornerRadius(7).backgroundColor(Vx.gray200).onTap(() {
-            var url =
-                "https://www.google.ci/maps/@${proposition['boutique_id']['lat']},${proposition['boutique_id']['lng']},12z?hl=fr&entry=ttu";
-            launchUrl(Uri.parse(url));
-          }),
-        ],
-        alignment: MainAxisAlignment.spaceBetween,
-      ),
-    ).backgroundColor(Colors.white).w(double.maxFinite).card.make();
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.only(top: 5),
+        child: HStack(
+          [
+            Image.network(
+              proposition["boutique_id"]["image"],
+              width: 50,
+            ).card.make(),
+            "${proposition['prix']}f/${controller.product["unite"]}"
+                .text
+                .size(10)
+                .bold
+                .color(Vx.red500)
+                .make(),
+            const LineIcon.shoppingBasket(
+              color: Vx.yellow500,
+            ).p(5).backgroundColor(Vx.gray200).onTap(
+                ()=> controller.addCommandeToBacket(proposition['id'])
+            ).card.make(),
+
+            const LineIcon.phone(
+              color: Vx.green700,
+            ).p(5).cornerRadius(7).backgroundColor(Vx.gray200)
+              .onTap((){
+                print(proposition);
+                Get.bottomSheet(VStack([
+                  HStack([
+                    Image.network(
+                      proposition["boutique_id"]["image"],
+                      width: 90,
+                    ).card.make(),
+                    5.widthBox,
+                    VStack([
+                      "${proposition["boutique_id"]["nom"]}".text.size(18).bold.make(),
+                      5.heightBox,
+                      "${proposition["boutique_id"]["contact"]}".text.gray500.bold.make(),
+                      "${proposition["boutique_id"]["email"] ?? ""}".text.gray500.bold.make(),
+                      "${proposition["boutique_id"]["ville"] ?? ""}, ${proposition["boutique_id"]["quartier"] ?? ""}".text.gray500.bold.make(),
+                    ])
+                  ]).p(3),
+                  15.heightBox,
+                  GFButton(
+                    onPressed: ()=> launchUrl(new Uri(scheme: "tel", path: proposition['boutique_id']['contact'])),
+                    blockButton: true,
+                    icon: LineIcon.phone(color: Vx.white,),
+                    color: Get.theme.primaryColor,
+                    child: "Appeler".text.white.make(),
+                  ).centered()
+                ]).card.white.topRounded(value: 7).make());
+              }).card.make(),
+            const LineIcon.mapMarker(
+              color: Vx.red500,
+            ).p(5).cornerRadius(7).backgroundColor(Vx.gray200).onTap(() {
+              var url =
+                  "https://www.google.ci/maps/@${proposition['boutique_id']['lat']},${proposition['boutique_id']['lng']},12z?hl=fr&entry=ttu";
+              launchUrl(Uri.parse(url));
+            }).card.make(),
+          ],
+          alignment: MainAxisAlignment.spaceBetween,
+        ),
+      ).backgroundColor(Colors.white).w(double.maxFinite).card.make(),
+    );
+  }
+}
+
+
+class PropositionCard extends GetView<ProductDetailController> {
+  const PropositionCard(Map<String, dynamic> proposition, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }

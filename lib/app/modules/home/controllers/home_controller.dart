@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:groci/app/data/core_provider.dart';
 import 'package:groci/app/routes/app_pages.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../../controllers/basket_controller.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -36,6 +37,7 @@ class HomeController extends GetxController {
 
         if( produits.isEmpty){
           // show notification
+          //VxToast.show(Get.context!, msg: "Article indisponible");
           Get.snackbar("Article indisponible", "" );
         }else{
           Get.toNamed(Routes.PRODUCT_DETAIL, arguments: {"product": produits[0]});

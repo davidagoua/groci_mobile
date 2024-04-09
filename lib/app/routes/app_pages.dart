@@ -62,7 +62,7 @@ class AppPages {
         name: _Paths.PRODUCT_DETAIL,
         page: () => const ProductDetailView(),
         binding: ProductDetailBinding(),
-        transition: Transition.zoom),
+        transition: Transition.downToUp),
     GetPage(
       name: _Paths.LOGIN,
       page: () => const LoginView(),
