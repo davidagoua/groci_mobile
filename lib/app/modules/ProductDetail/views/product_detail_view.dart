@@ -114,7 +114,7 @@ class PropositionCard extends GetView<ProductDetailController> {
               proposition["boutique_id"]["image"],
               width: 50,
             ).card.make(),
-            "${proposition['prix']}f/${controller.product["unite"]}"
+            "${proposition['prix']} fcfa"
                 .text
                 .size(10)
                 .bold

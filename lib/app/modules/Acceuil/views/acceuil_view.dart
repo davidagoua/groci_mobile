@@ -151,7 +151,7 @@ class AcceuilView extends GetView<AcceuilController> {
         trailing: VStack([
           produit['min_price'] == null
               ? "Aucune".text.green700.size(10).make()
-              : "${produit['min_price']}f".text.size(10).color(Vx.gray500).make()
+              : "${produit['min_price']} fcfa".text.size(10).color(Vx.gray500).make()
         ]),
       ).card.make().onTap(()  {
           Get.toNamed(Routes.PRODUCT_DETAIL, arguments: {"product": produit});
