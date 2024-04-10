@@ -30,8 +30,9 @@ class ProductDetailController extends GetxController {
       }else{
         propositions(value.body!["propositions"]);
       }
+      proposition_loading.toggle();
     });
-    proposition_loading.toggle();
+
   }
 
   void addCommandeToBacket(int proposition_id){

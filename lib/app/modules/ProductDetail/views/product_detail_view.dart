@@ -81,17 +81,28 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 )
               : VStack(controller
                       .propositions()
-                      .map((e) => getPropositionCard(e))
+                      .map((e) => PropositionCard(e))
                       .toList())
-                  .scrollVertical()
+                  .scrollVertical(physics: const BouncingScrollPhysics())
                   .h(double.maxFinite)),
         ).pSymmetric(h: 10).expand()
       ]),
     );
   }
 
-  Widget getPropositionCard(Map<String, dynamic> proposition) {
+}
+
+
+class PropositionCard extends GetView<ProductDetailController> {
+
+  final Map<String, dynamic> proposition;
+
+  const PropositionCard(Map<String, dynamic> this.proposition, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return BounceInLeft(
+      key: Key('proposition_boutique_${proposition['id']}'),
       from: 15,
       child: Container(
 
@@ -109,63 +120,58 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 .bold
                 .color(Vx.red500)
                 .make(),
-            const LineIcon.shoppingBasket(
-              color: Vx.yellow500,
-            ).p(5).backgroundColor(Vx.gray200).onTap(
-                ()=> controller.addCommandeToBacket(proposition['id'])
-            ).card.make(),
 
-            const LineIcon.phone(
-              color: Vx.green700,
-            ).p(5).cornerRadius(7).backgroundColor(Vx.gray200)
-              .onTap((){
-                print(proposition);
-                Get.bottomSheet(VStack([
-                  HStack([
-                    Image.network(
-                      proposition["boutique_id"]["image"],
-                      width: 90,
-                    ).card.make(),
-                    5.widthBox,
-                    VStack([
-                      "${proposition["boutique_id"]["nom"]}".text.size(18).bold.make(),
-                      5.heightBox,
-                      "${proposition["boutique_id"]["contact"]}".text.gray500.bold.make(),
-                      "${proposition["boutique_id"]["email"] ?? ""}".text.gray500.bold.make(),
-                      "${proposition["boutique_id"]["ville"] ?? ""}, ${proposition["boutique_id"]["quartier"] ?? ""}".text.gray500.bold.make(),
-                    ])
-                  ]).p(3),
-                  15.heightBox,
-                  GFButton(
-                    onPressed: ()=> launchUrl(new Uri(scheme: "tel", path: proposition['boutique_id']['contact'])),
-                    blockButton: true,
-                    icon: LineIcon.phone(color: Vx.white,),
-                    color: Get.theme.primaryColor,
-                    child: "Appeler".text.white.make(),
-                  ).centered()
-                ]).card.white.topRounded(value: 7).make());
+            HStack([
+              const LineIcon.shoppingBasket(
+                color: Vx.white,
+              ).p(5).backgroundColor(Get.theme.primaryColor).onTap(
+                      ()=> controller.addCommandeToBacket(proposition['id'])
+              ).card.make(),
+
+              const LineIcon.phone(
+                color: Vx.white,
+              ).p(5).cornerRadius(7).backgroundColor(Get.theme.primaryColor)
+                  .onTap(this.showBoutiqueContact).card.make(),
+
+              const LineIcon.mapMarker(
+                color: Vx.white,
+              ).p(5).cornerRadius(7).backgroundColor(Get.theme.primaryColor).onTap(() {
+                var url =
+                    "https://www.google.ci/maps/@${proposition['boutique_id']['lat']},${proposition['boutique_id']['lng']},12z?hl=fr&entry=ttu";
+                launchUrl(Uri.parse(url));
               }).card.make(),
-            const LineIcon.mapMarker(
-              color: Vx.red500,
-            ).p(5).cornerRadius(7).backgroundColor(Vx.gray200).onTap(() {
-              var url =
-                  "https://www.google.ci/maps/@${proposition['boutique_id']['lat']},${proposition['boutique_id']['lng']},12z?hl=fr&entry=ttu";
-              launchUrl(Uri.parse(url));
-            }).card.make(),
+            ])
           ],
           alignment: MainAxisAlignment.spaceBetween,
         ),
       ).backgroundColor(Colors.white).w(double.maxFinite).card.make(),
     );
   }
-}
 
-
-class PropositionCard extends GetView<ProductDetailController> {
-  const PropositionCard(Map<String, dynamic> proposition, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+  void showBoutiqueContact(){
+    Get.bottomSheet(VStack([
+      HStack([
+        Image.network(
+          proposition["boutique_id"]["image"],
+          width: 90,
+        ).card.make(),
+        5.widthBox,
+        VStack([
+          "${proposition["boutique_id"]["nom"]}".text.size(18).bold.make(),
+          5.heightBox,
+          "${proposition["boutique_id"]["contact"]}".text.gray500.bold.make(),
+          "${proposition["boutique_id"]["email"] ?? ""}".text.gray500.bold.make(),
+          "${proposition["boutique_id"]["ville"] ?? ""}, ${proposition["boutique_id"]["quartier"] ?? ""}".text.gray500.bold.make(),
+        ])
+      ]).p(3),
+      15.heightBox,
+      GFButton(
+        onPressed: ()=> launchUrl(new Uri(scheme: "tel", path: proposition['boutique_id']['contact'])),
+        blockButton: true,
+        icon: LineIcon.phone(color: Vx.white,),
+        color: Get.theme.primaryColor,
+        child: "Appeler".text.white.make(),
+      ).centered()
+    ]).card.white.topRounded(value: 7).make());
   }
 }
