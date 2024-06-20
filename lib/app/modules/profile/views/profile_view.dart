@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:line_icons/line_icon.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../controllers/profile_controller.dart';
@@ -15,32 +17,55 @@ class ProfileView extends GetView<ProfileController> {
 
       body: VStack([
         Container(
+          height: Get.height / 10 * 2,
           padding: EdgeInsets.all(30),
           color: Get.theme.primaryColor,
           child: Center(
             child: Icon(Icons.supervised_user_circle_sharp, size: 80, color: Get.theme.primaryColor).circle(backgroundColor: Vx.white,),
           ),
-        ).h(Get.height / 10 * 2),
+        ).card.make(),
         Container(
           color: Vx.gray100,
-          child: Center(
-            child: VStack([
-              "Numero de téléphone".text.make().centered(),
-              10.heightBox,
-              Obx(() => "${controller.contact}".text.make().centered()),
-              10.heightBox,
-              GFButton(
-                elevation: 5,
-                textColor: Colors.white,
-                color: Get.theme.primaryColor,
-                onPressed: ()=>{
-                  Get.bottomSheet(updateContactWidget())
-                },
-                child: "Modifier mon numero de téléphone".text.bold.make(),
-              ).centered(),
+          child: VStack([
+            ListTile(
+              leading: LineIcon.phone(),
+              title: Obx(()=>"${controller.contact}".text.make()),
+              subtitle: "Numero de téléphone".text.make(),
+              trailing:  LineIcon.edit(
+                color: Vx.white,
+              ).p(5).cornerRadius(7)
+                  .backgroundColor(Get.theme.primaryColor)
+                  .onTap(()=> Get.defaultDialog(
+                  title: "Modifier mon contact",
+                  titleStyle: TextStyle(fontSize: 19),
+                  textConfirm: "Enregistrer",
+                  content: updateContactWidget(),
+                  onConfirm: (){controller.updateContact(); Get.back();}
+              )
+              ).card.make(),
+            ).backgroundColor(Colors.white),
+            /*
+            ListTile(
+              leading: LineIcon.locationArrow(),
+              title: Obx(()=>"${controller.ville}".text.make()),
+              subtitle: "Ville".text.make(),
+              trailing: const LineIcon.edit(
+                color: Vx.white,
+              ).p(5).cornerRadius(7)
+                  .backgroundColor(Get.theme.primaryColor)
+                  .onTap(()=> Get.defaultDialog(
+                  title: "Modifier la ville",
+                  titleStyle: TextStyle(fontSize: 19),
+                  textConfirm: "Enregistrer",
+                  content: updateVilleWidget(),
+                  onConfirm: (){ Get.back();}
+              )
+              ).card.make(),
+            ).backgroundColor(Colors.white),
+            */
 
-            ], alignment: MainAxisAlignment.center,),
-          ),
+
+          ], ),
         ).h(Get.height / 10 * 3).expand(flex: 1),
 
         20.heightBox,
@@ -80,29 +105,36 @@ class ProfileView extends GetView<ProfileController> {
 
   Widget updateContactWidget(){
     return Container(
-      height: Get.height / 10 * 4,
       padding: EdgeInsets.symmetric(horizontal: 7, vertical: 5),
-      color: Colors.white,
       child: Form(
         child: VStack([
           TextFormField(
             keyboardType: TextInputType.phone,
             controller: controller.contactCtrl,
             decoration: InputDecoration(
-              hintText: "Entrez votre contact"
+                hintText: "Entrez votre contact"
             ),
           ),
-          5.heightBox,
-          GFButton(
-            onPressed: controller.updateContact,
-            type: GFButtonType.solid,
-            size: GFSize.LARGE,
-            blockButton: true,
-            color: Get.theme.primaryColor,
-            text: "Enregistrer",
-          )
+
         ], crossAlignment: CrossAxisAlignment.center,),
       ),
     );
+  }
+
+  Widget updateVilleWidget(){
+    return Obx(() => FormBuilderDropdown<String>(
+      name: 'villes',
+      onChanged: (String? value)=>{ controller.updateVille(value)},
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "Choisissez votre ville",
+          suffixIconColor: Vx.red500),
+      items: controller.villes().map((e) {
+        return DropdownMenuItem<String>(
+          value: e,
+          child: Text(e),
+        );
+      }).toList(),
+    ));
   }
 }

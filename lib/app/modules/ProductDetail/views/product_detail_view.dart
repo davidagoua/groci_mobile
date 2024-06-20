@@ -149,7 +149,7 @@ class PropositionCard extends GetView<ProductDetailController> {
   }
 
   void showBoutiqueContact(){
-    Get.bottomSheet(VStack([
+    Get.bottomSheet(VStack(key:Key(''),[
       HStack([
         Image.network(
           proposition["boutique_id"]["image"],

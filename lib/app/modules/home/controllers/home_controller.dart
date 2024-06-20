@@ -38,7 +38,7 @@ class HomeController extends GetxController {
         if( produits.isEmpty){
           // show notification
           //VxToast.show(Get.context!, msg: "Article indisponible");
-          Get.snackbar("Article indisponible", "" );
+          Get.defaultDialog(title: "Produit Introuvable", radius: 10, content: "Désolé sur code barre ne correspond a aucun produit enrégistré !".text.center.make() );
         }else{
           Get.toNamed(Routes.PRODUCT_DETAIL, arguments: {"product": produits[0]});
         }

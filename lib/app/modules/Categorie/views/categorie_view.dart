@@ -32,7 +32,7 @@ class CategorieView extends GetView<CategorieController> {
               crossAxisCount: 3,
               crossAxisSpacing: 5,
               mainAxisSpacing: 5,
-              children: controller.categories().map((e) => BounceInUp(
+              children: controller.categories().map((e) => ZoomIn(
                 child: Container(
                 
                   padding: const EdgeInsets.symmetric(
@@ -69,27 +69,20 @@ class CategorieView extends GetView<CategorieController> {
   Widget getHeader(){
     return Container(
         child: VStack([
-          Obx(()=>  !controller.load.value ? GFLoader(type: GFLoaderType.ios,) : HStack(
+          Obx(()=>  !controller.load.value ? GFLoader(type: GFLoaderType.ios) : HStack(
             [
-              CachedNetworkImage(
-                imageUrl: "https://c-moinscher.ci/images/amoirie.png",
-                placeholder: (context, url) => const GFLoader(type: GFLoaderType.ios,),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+              Container(
+                child: Image.asset("images/amoirie.png"),
               ).h(30),
-              CachedNetworkImage(
-                imageUrl: "https://c-moinscher.ci/images/group.png",
-                placeholder: (context, url) => const GFLoader(type: GFLoaderType.ios,),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+              Container(
+                child: Image.asset("images/amoirie.png"),
               ).h(30),
             ],
             alignment: MainAxisAlignment.spaceBetween,
-          ).w(double.maxFinite))
-          ,
+          ).w(double.maxFinite)),
           5.heightBox,
-          CachedNetworkImage(
-            imageUrl: "https://c-moinscher.ci/images/logo.jpg",
-            placeholder: (context, url) => GFLoader(type: GFLoaderType.ios,),
-            errorWidget: (context, url, error) => Icon(Icons.error),
+          Container(
+            child: Image.asset("images/logo.jpg"),
           ).h(50),
         ], crossAlignment: CrossAxisAlignment.center,).p(15).backgroundColor(Vx.white),
     );

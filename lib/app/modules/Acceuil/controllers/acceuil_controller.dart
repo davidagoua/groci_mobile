@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:groci/app/data/core_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class AcceuilController extends GetxController {
@@ -13,6 +14,7 @@ class AcceuilController extends GetxController {
   final search = "".obs;
   final selectedCategorie = <String, dynamic>{"nom":"Produits vivrier", "id":  1}.obs;
   final showCategorie = true.obs;
+  final selectedVille = "".obs;
 
   final product_loading = false.obs;
   final formKey = GlobalKey<FormBuilderState>();
@@ -20,7 +22,7 @@ class AcceuilController extends GetxController {
   final animated = false.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     CoreProvider().getCategories().then((value) => {
           if (value.statusCode! != 200)
@@ -31,6 +33,10 @@ class AcceuilController extends GetxController {
     fetchProducts();
     fetchVilles();
 
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    selectedVille(prefs.getString("VILLE"));
+
+    /*
     searchFocus.addListener(() {
       if(searchFocus.hasFocus){
         showCategorie.value = false;
@@ -38,6 +44,8 @@ class AcceuilController extends GetxController {
         showCategorie.value = true;
       }
     });
+
+     */
   }
 
   void fetchProducts({int? categorie_id = 5}) async {

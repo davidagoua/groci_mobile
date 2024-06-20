@@ -5,6 +5,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
 import 'package:groci/app/routes/app_pages.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -78,9 +79,9 @@ class AcceuilView extends GetView<AcceuilController> {
           /*
           Obx(() => FormBuilderDropdown<String>(
                 name: 'villes',
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: "Choisissez votre ville",
+                    hintText: controller.selectedVille.value,
                     suffixIconColor: Vx.red500),
                 items: controller.villes().map((e) {
                   return DropdownMenuItem<String>(
@@ -90,9 +91,9 @@ class AcceuilView extends GetView<AcceuilController> {
                 }).toList(),
               )),
 
-           */
           5.heightBox,
-          FormBuilderTextField(
+          */
+          Obx(()=>FormBuilderTextField(
             focusNode: controller.searchFocus,
             name: 'query',
             onChanged: (value) {
@@ -100,12 +101,17 @@ class AcceuilView extends GetView<AcceuilController> {
               controller.fetchProducts();
             },
             controller: controller.query_ctl,
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
               hintText: "Rechercher un produit...",
-              suffixIcon: Icon(Icons.search),
+              suffixIcon: controller.search.value.length <= 0 ? Icon(Icons.search) : Icon(LineIcons.times).onTap(() {
+                controller.search("");
+                controller.query_ctl.text = "";
+                controller.fetchProducts();
+                controller.searchFocus.unfocus();
+              }),
               border: OutlineInputBorder(),
             ),
-          )
+          ))
         ]),
       ),
     );
@@ -140,7 +146,9 @@ class AcceuilView extends GetView<AcceuilController> {
   }
 
   Widget getProductListCart(Map<String, dynamic> produit) {
-    return Container(
+    return BounceInDown(
+
+        child: Container(
       key: Key("acceuil_product_${produit['id']}"),
       color: Colors.white,
       child: ListTile(
@@ -154,8 +162,9 @@ class AcceuilView extends GetView<AcceuilController> {
               : "${produit['min_price']} fcfa".text.size(10).color(Vx.gray500).make()
         ]),
       ).card.make().onTap(()  {
-          Get.toNamed(Routes.PRODUCT_DETAIL, arguments: {"product": produit});
+        Get.toNamed(Routes.PRODUCT_DETAIL, arguments: {"product": produit});
       }),
+    )
     );
   }
 
@@ -168,7 +177,7 @@ class AcceuilView extends GetView<AcceuilController> {
               child: Image.asset("images/amoirie.png"),
             ).h(30),
             Container(
-              child: Image.asset("images/group.png"),
+              child: Image.asset("images/amoirie.png"),
             ).h(30),
 
           ],

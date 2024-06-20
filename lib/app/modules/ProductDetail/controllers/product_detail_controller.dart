@@ -36,6 +36,6 @@ class ProductDetailController extends GetxController {
   }
 
   void addCommandeToBacket(int proposition_id){
-    basketController.addCommande(product['id'], count.value, product_name: product['nom']);
+    basketController.addCommande(proposition_id, count.value, product_name: product['nom']);
   }
 }

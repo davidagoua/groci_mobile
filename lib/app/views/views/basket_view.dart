@@ -108,7 +108,7 @@ class BasketView extends GetView {
             "${e['produit']['nom']} x ${e['quantite']} \n${e['somme']} FCFA".text.make(),
             const Spacer(),
             IconButton(
-              onPressed: ()=> controller.removeProposition(e['produit_id']),
+              onPressed: ()=> controller.removeProposition(e['id']),
               icon: const LineIcon.times(color: Colors.red)
             )
           ]
