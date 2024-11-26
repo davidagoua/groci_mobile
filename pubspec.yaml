@@ -22,6 +22,7 @@ dependencies:
   cached_network_image: 3.3.1
   stylish_bottom_bar:
   flutter_barcode_scanner:
+  liquid_pull_to_refresh:
   animate_do:
   flutter: 
     sdk: flutter
