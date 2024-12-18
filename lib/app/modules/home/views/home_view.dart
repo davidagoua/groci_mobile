@@ -31,7 +31,7 @@ class HomeView extends GetView<HomeController> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Get.theme.primaryColor,
-        onPressed: controller.scanBarCode,
+        onPressed: ()=> controller.scanBarCode(context),
         child: LineIcon.barcode(color: Colors.white,),
       ),
       body: SafeArea(

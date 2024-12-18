@@ -4,7 +4,7 @@ import 'package:groci/app/routes/app_pages.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../controllers/basket_controller.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart'
 
 
 class HomeController extends GetxController {
@@ -14,15 +14,23 @@ class HomeController extends GetxController {
   BasketController basketController = Get.find<BasketController>();
   final core_provider = CoreProvider();
 
-  void scanBarCode() async{
+  void scanBarCode(BuildContext context) async{
 
 
     // scanner le code barre
-    String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-        "#ff6666",
-        "Annuler",
-        true,
-        ScanMode.DEFAULT);
+    String? barcodeScanRes = await SimpleBarcodeScanner.scanBarcode(
+      context,
+      barcodeAppBar: const BarcodeAppBar(
+        appBarTitle: 'Scanner le code bar du produit',
+        centerTitle: false,
+        enableBackButton: true,
+        backButtonIcon: Icon(Icons.arrow_back_ios),
+      ),
+      isShowFlashIcon: true,
+      delayMillis: 500,
+      cameraFace: CameraFace.back,
+      scanFormat: ScanFormat.ONLY_BARCODE,
+      );
     barcodeLoading.value = true;
 
     // retrouver le le produit a partir de code barre
