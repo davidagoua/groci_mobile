@@ -4,7 +4,7 @@ import 'package:groci/app/routes/app_pages.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../controllers/basket_controller.dart';
-import 'package:simple_barcode_scanner/simple_barcode_scanner.dart'
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 
 class HomeController extends GetxController {
@@ -19,7 +19,7 @@ class HomeController extends GetxController {
 
     // scanner le code barre
     String? barcodeScanRes = await SimpleBarcodeScanner.scanBarcode(
-      context,
+      Get.context,
       barcodeAppBar: const BarcodeAppBar(
         appBarTitle: 'Scanner le code bar du produit',
         centerTitle: false,
