@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:groci/app/data/core_provider.dart';
 import 'package:groci/app/routes/app_pages.dart';
 import 'package:velocity_x/velocity_x.dart';
-
+import 'package:flutter/material.dart';
 import '../../../controllers/basket_controller.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
@@ -14,12 +14,11 @@ class HomeController extends GetxController {
   BasketController basketController = Get.find<BasketController>();
   final core_provider = CoreProvider();
 
-  void scanBarCode(BuildContext context) async{
-
+  void scanBarCode() async{
 
     // scanner le code barre
     String? barcodeScanRes = await SimpleBarcodeScanner.scanBarcode(
-      Get.context,
+      Get.context!,
       barcodeAppBar: const BarcodeAppBar(
         appBarTitle: 'Scanner le code bar du produit',
         centerTitle: false,
