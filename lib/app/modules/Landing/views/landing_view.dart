@@ -15,7 +15,7 @@ class LandingView extends GetView<LandingController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ZStack([
-        BackgroundImage(),
+        BackgroundImage(context),
         VStack([
           50.heightBox,
           Container(child: Image.asset("images/logo_front.png").centered()),
@@ -87,5 +87,5 @@ class LandingView extends GetView<LandingController> {
             fit: BoxFit.fill)),
   );
 
-  Widget BackgroundImage() => Image.asset("images/splash_back.png", height: Get.height, width: Get.width,);
+  Widget BackgroundImage(BuildContext context) => Image.asset("images/splash_back.png", height: MediaQuery. of(contexte).size.height, width: MediaQuery.of(context).size.width,);
 }
