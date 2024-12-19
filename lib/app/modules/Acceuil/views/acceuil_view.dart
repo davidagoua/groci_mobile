@@ -22,7 +22,7 @@ class AcceuilView extends GetView<AcceuilController> {
 
         getHeader(),
 
-        Obx(() => controller.showCategorie.value ? ZoomIn(child: getCategorieWidget(), duration: Duration(milliseconds: 300),) : 0.heightBox),
+        Obx(() => controller.showCategorie.value ? ZoomIn(child: getCategorieWidget(context), duration: Duration(milliseconds: 300),) : 0.heightBox),
         10.heightBox,
         getSous2Catgeorie(),
         10.heightBox,
@@ -33,7 +33,7 @@ class AcceuilView extends GetView<AcceuilController> {
     );
   }
 
-  Widget getCategorieWidget() {
+  Widget getCategorieWidget(BuildContext context) {
     return Container(
       color: Get.theme.primaryColor,
       child: Obx(() => controller.categories.isEmpty
@@ -70,7 +70,7 @@ class AcceuilView extends GetView<AcceuilController> {
                     .toList(),
               ).scrollHorizontal()
             ])),
-    ).h(Get.height / 10 * 1.8).w(double.maxFinite);
+    ).h(MediaQuery.of(context).size.height / 10 * 1.8).w(double.maxFinite);
   }
 
   Widget getSearchesBox() {
@@ -182,14 +182,16 @@ class AcceuilView extends GetView<AcceuilController> {
     return Container(
       child: Obx(()=> HStack(
         controller.sous2Categories.map((element) => GFButton(
-          color:  Vx.red600,
+          shape: GFButtonShape.pills,
+          type: GFButtonType.outline2x,
+          color: controller.selectedSous2Categorie.value == element.id ? Vx.red700 : Vx.red500,
           onPressed: ()=>{
-            controller.fetchProducts(sous_sous_categorie_id: element.id)
+            controller.onSous2CategorieSelect(element.id)
           },
           child: HStack([
             Image.network(element.image),
             2.widthBox,
-            Text("${element.nom}")
+            "${element.nom}".text.color(controller.selectedSous2Categorie.value == element.id ? Vx.red700 : Vx.red500).make()
           ])
         ).pOnly(right: 2)).toList(),
       ).scrollHorizontal())

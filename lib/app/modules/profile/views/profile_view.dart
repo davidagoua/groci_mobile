@@ -17,7 +17,7 @@ class ProfileView extends GetView<ProfileController> {
 
       body: VStack([
         Container(
-          height: Get.height / 10 * 2,
+          height: MediaQuery.of(context).size.height / 10 * 2,
           padding: EdgeInsets.all(30),
           color: Get.theme.primaryColor,
           child: Center(
@@ -66,7 +66,7 @@ class ProfileView extends GetView<ProfileController> {
 
 
           ], ),
-        ).h(Get.height / 10 * 3).expand(flex: 1),
+        ).h(MediaQuery.of(context).size.height / 10 * 3).expand(flex: 1),
 
         20.heightBox,
 

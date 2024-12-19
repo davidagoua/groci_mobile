@@ -148,11 +148,13 @@ class AcceuilController extends GetxController {
 
   void onSous2CategorieSelect(int categorie_id) async {
     selectedSous2Categorie.value = categorie_id;
-    fetchProducts(categorie_id: categorie_id);
+    fetchProducts(sous_sous_categorie_id: categorie_id);
   }
 
   void onCategorieSelect({int? categorie_id = null}) async {
-    await fetchCategorieChildren(categorie_id!);
     fetchProducts(categorie_id: categorie_id);
+    await fetchCategorieChildren(categorie_id!);
+    sous2Categories.value = [];
+
   }
 }
