@@ -30,6 +30,8 @@ class AcceuilController extends GetxController {
 
   final RxList<Categorie> allCategories = <Categorie>[].obs;
 
+  final categorieLoading = false.obs;
+
   @override
   void onInit() async {
     super.onInit();
@@ -101,6 +103,7 @@ class AcceuilController extends GetxController {
 
 
     try{
+      categorieLoading.value = true;
       final result = await CoreProvider()
           .getCategorieChildren(categorie_id);
 
@@ -112,7 +115,7 @@ class AcceuilController extends GetxController {
     }catch(e,t){
       Logger().e(e);
     }finally{
-
+      categorieLoading.value = false;
     }
 
   }
@@ -152,9 +155,26 @@ class AcceuilController extends GetxController {
   }
 
   void onCategorieSelect({int? categorie_id = null}) async {
-    fetchProducts(categorie_id: categorie_id);
+    fetchProductsFromParentCategorie(categorie_id!);
     await fetchCategorieChildren(categorie_id!);
     sous2Categories.value = [];
+  }
 
+  Future<void> fetchProductsFromParentCategorie(int categorie_id) async {
+    product_loading.value = true;
+    await CoreProvider()
+        .getProductsFromParentCategorie(categorie_id)
+        .then((value) {
+      if (value.statusCode! == 200) {
+        products(value.body!["produits"]);
+        Logger().d(value.body!["produits"]);
+      } else {
+
+      }
+    });
+    product_loading.value = false;
+    animated.toggle();
+    selectedCategorie.value =
+        categories.firstWhere((cat) => cat['id'] == categorie_id) ?? {"nom":"Toutes les categories", "id":  1};
   }
 }

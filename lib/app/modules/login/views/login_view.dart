@@ -15,7 +15,7 @@ class LoginView extends GetView<LoginController> {
       backgroundColor: Vx.white,
       body: VStack([
         Container(child: Image.asset("images/logo_front.png", height: 40,).centered())
-            .backgroundColor(Get.theme.primaryColor).h(Get.height / 10 * 2),
+            .backgroundColor(Get.theme.primaryColor).h(MediaQuery.of(context).size.height / 10 * 2),
         Container(
 
           decoration: BoxDecoration(

@@ -22,7 +22,7 @@ class AcceuilView extends GetView<AcceuilController> {
 
         getHeader(),
 
-        Obx(() => controller.showCategorie.value ? ZoomIn(child: getCategorieWidget(context), duration: Duration(milliseconds: 300),) : 0.heightBox),
+        Obx(() => controller.categorieLoading.value ? ZoomIn(child: getCategorieWidget(context), duration: Duration(milliseconds: 300),) : CirculaProgressIndicator()),
         10.heightBox,
         getSous2Catgeorie(),
         10.heightBox,

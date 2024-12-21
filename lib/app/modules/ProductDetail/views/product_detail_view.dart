@@ -41,7 +41,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
               height: 120,
             ).centered()
           ]),
-        ).backgroundColor(Vx.white).w(Get.width).h(Get.height / 10 * 2.5),
+        ).backgroundColor(Vx.white).w(MediaQuery.of(context).size.width).h(MediaQuery.of(context).size.height / 10 * 2.5),
         Padding(
           padding: EdgeInsets.all(10),
           child: HStack(

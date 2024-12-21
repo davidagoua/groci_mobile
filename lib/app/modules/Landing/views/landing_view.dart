@@ -76,16 +76,11 @@ class LandingView extends GetView<LandingController> {
     );
   }
 
-  Widget getBackground() => Container(
-    height: Get.height,
-    width: Get.width,
-    decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage(
-              "images/splash_back.png",
-            ),
-            fit: BoxFit.fill)),
-  );
 
-  Widget BackgroundImage(BuildContext context) => Image.asset("images/splash_back.png", height: MediaQuery. of(context).size.height, width: MediaQuery.of(context).size.width,);
+
+  Widget BackgroundImage(BuildContext context) => Image.asset(
+    "images/splash_back.png",
+    height: MediaQuery. of(context).size.height,
+    width: MediaQuery.of(context).size.width
+  );
 }

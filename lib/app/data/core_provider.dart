@@ -138,4 +138,8 @@ class CoreProvider extends GetConnect {
     Logger().d(url);
     return await get(url);
   }
+
+  Future<Response<dynamic>> getProductsFromParentCategorie(int categorie_id) async {
+    return await get("https://c-moinscher.ci/api/shop/categorie-parent/$categorie_id/produits");
+  }
 }
