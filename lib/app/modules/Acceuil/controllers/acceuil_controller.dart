@@ -36,13 +36,13 @@ class AcceuilController extends GetxController {
   void onInit() async {
     super.onInit();
 
-    await fetchCategories();
+    //await fetchCategories();
     allCategories.value = await CoreProvider().getAllCategories();
     fetchProducts();
     fetchVilles();
 
-    await fetchCategorieChildren(this.selectedCategorie.value["id"]);
-    await fetchSous2Categories(selectedSousCategorie.value);
+    //await fetchCategorieChildren(this.selectedCategorie.value["id"]);
+    //await fetchSous2Categories(selectedSousCategorie.value);
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     selectedVille(prefs.getString("VILLE"));

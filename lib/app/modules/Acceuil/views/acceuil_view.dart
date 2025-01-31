@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:get/get.dart';
-import 'package:getwidget/components/list_tile/gf_list_tile.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:groci/app/routes/app_pages.dart';
 import 'package:line_icons/line_icons.dart';
@@ -21,12 +20,15 @@ class AcceuilView extends GetView<AcceuilController> {
       child: VStack([
 
         getHeader(),
-
-        Obx(() => controller.categorieLoading.value ? ZoomIn(child: getCategorieWidget(context), duration: Duration(milliseconds: 300),) : CirculaProgressIndicator()),
+        
+        /*
+        Obx(() => controller.showCategorie.value ? ZoomIn(child: getCategorieWidget(context), duration: Duration(milliseconds: 300),) : 0.heightBox),
         10.heightBox,
         getSous2Catgeorie(),
         10.heightBox,
-        getSearchesBox(),
+        */
+
+        //getSearchesBox(),
         10.heightBox,
         getProduitsWidget()
       ]).w(double.maxFinite),
@@ -54,7 +56,7 @@ class AcceuilView extends GetView<AcceuilController> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 15, vertical: 20),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: controller.selectedSousCategorie.value == e['id'] ? Colors.red[200] : Colors.white,
                       borderRadius: BorderRadius.circular(7)),
                   child: VStack(
                     [
@@ -80,24 +82,26 @@ class AcceuilView extends GetView<AcceuilController> {
         key: controller.formKey,
         child: VStack([
 
-          Obx(()=>FormBuilderTextField(
-            focusNode: controller.searchFocus,
-            name: 'query',
-            onChanged: (value) {
-              controller.search(value);
-              controller.fetchProducts();
-            },
-            controller: controller.query_ctl,
-            decoration:  InputDecoration(
-              hintText: "Rechercher un produit...",
-              suffixIcon: controller.search.value.length <= 0 ? Icon(Icons.search) : Icon(LineIcons.times).onTap(() {
-                controller.search("");
-                controller.query_ctl.text = "";
+          Obx(()=>Container(
+            child: FormBuilderTextField(
+              focusNode: controller.searchFocus,
+              name: 'query',
+              onChanged: (value) {
+                controller.search(value);
                 controller.fetchProducts();
-                controller.searchFocus.unfocus();
-              }),
-              border: OutlineInputBorder(),
-            ),
+              },
+              controller: controller.query_ctl,
+              decoration:  InputDecoration(
+                hintText: "Rechercher un produit...",
+                suffixIcon: controller.search.value.length <= 0 ? Icon(Icons.search) : Icon(LineIcons.times).onTap(() {
+                  controller.search("");
+                  controller.query_ctl.text = "";
+                  controller.fetchProducts();
+                  controller.searchFocus.unfocus();
+                }),
+                border: OutlineInputBorder(),
+              ),
+            )
           ))
         ]),
       ),
@@ -180,21 +184,22 @@ class AcceuilView extends GetView<AcceuilController> {
 
   Widget getSous2Catgeorie(){
     return Container(
-      child: Obx(()=> HStack(
-        controller.sous2Categories.map((element) => GFButton(
-          shape: GFButtonShape.pills,
-          type: GFButtonType.outline2x,
-          color: controller.selectedSous2Categorie.value == element.id ? Vx.red700 : Vx.red500,
-          onPressed: ()=>{
-            controller.onSous2CategorieSelect(element.id)
-          },
-          child: HStack([
-            Image.network(element.image),
-            2.widthBox,
-            "${element.nom}".text.color(controller.selectedSous2Categorie.value == element.id ? Vx.red700 : Vx.red500).make()
-          ])
-        ).pOnly(right: 2)).toList(),
-      ).scrollHorizontal())
+      child: Obx(()=> VStack([
+        HStack(
+          controller.sous2Categories.map((element) => GFButton(
+            shape: GFButtonShape.pills,
+            color: controller.selectedSous2Categorie.value == element.id ? Vx.red500 : Vx.white,
+            onPressed: ()=>{
+              controller.onSous2CategorieSelect(element.id)
+            },
+            child: HStack([
+              Image.network(element.image),
+              2.widthBox,
+              "${element.nom}".text.color(controller.selectedSous2Categorie.value == element.id ? Vx.white : Vx.red500).make()
+            ])
+          ).pOnly(right: 2)).toList(),
+        ).scrollHorizontal()
+      ]))
     );
   }
 }

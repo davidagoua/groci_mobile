@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:velocity_x/velocity_x.dart';
-
+import 'package:dropdown_search/dropdown_search.dart';
 import '../controllers/login_controller.dart';
+import 'package:groci/utils/contants.dart';
+
 
 class LoginView extends GetView<LoginController> {
   const LoginView({Key? key}) : super(key: key);
@@ -41,7 +43,22 @@ class LoginView extends GetView<LoginController> {
                     focusColor: Vx.black
                 ),
               ),
-
+              15.heightBox,
+              "Ville".text.bold.make(),
+              10.heightBox,
+              Obx(()=>Container(
+                  child: DropdownSearch<String>(
+                selectedItem: controller.ville.value,
+                items: (filter, infiniteScrollProps) => kVilles,
+                decoratorProps: DropDownDecoratorProps(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                onChanged: (value) => controller.changeVille(value!),
+                popupProps: PopupProps.menu(
+                    fit: FlexFit.loose, constraints: BoxConstraints()),
+              ))),
               15.heightBox,
 
               GFButton(

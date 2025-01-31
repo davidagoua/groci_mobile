@@ -22,14 +22,14 @@ class LandingView extends GetView<LandingController> {
           Container().expand(flex: 1),
           Container(
             child: VStack([
-              "C'moins cher \nest un comparateur de prix"
+              "C'moins cher \nPour acheter là où c’est moins cher"
                   .text
                   .bold
                   .size(18)
                   .white
                   .make()
                   .pSymmetric(h: 20, v: 10),
-              "Pour: \n- Trouver où les produits sont moins cher \n- Faire des achat a moindre coûts \n- Maitriser son budget \n- Réaliser de bonne affaires"
+              "Pour: \n- Trouver où les produits sont moins chers  \n- Faire des achats à moindre coût\n- Maîtriser son budget\n- Réaliser de bonnes affaires"
                   .text
                   .white
                   .make()
@@ -62,7 +62,7 @@ class LandingView extends GetView<LandingController> {
               Container(
                 color: Vx.white,
                 child: HStack([
-                  Image.asset("images/amoirie.png").h(40),
+                  Image.asset("images/amoirie.jpg").h(40),
                   Image.asset("images/group.png").h(40),
                 ], alignment: MainAxisAlignment.spaceAround,),
               ).w(double.maxFinite),

@@ -13,6 +13,10 @@ abstract class Routes {
   static const PRODUCT_DETAIL = _Paths.PRODUCT_DETAIL;
   static const LOGIN = _Paths.LOGIN;
   static const SHOP_RESUME = _Paths.SHOP_RESUME;
+  static const SOUSCATEGORIE = _Paths.SOUSCATEGORIE;
+  static const SOUS2CATEGORIE = _Paths.SOUS2CATEGORIE;
+  static const PRODUCT_LIST = _Paths.PRODUCT_LIST;
+  static const SEARCH = _Paths.SEARCH;
 }
 
 abstract class _Paths {
@@ -27,4 +31,8 @@ abstract class _Paths {
   static const PRODUCT_DETAIL = '/product-detail';
   static const LOGIN = '/login';
   static const SHOP_RESUME = '/shop-resume';
+  static const SOUSCATEGORIE = '/souscategorie';
+  static const SOUS2CATEGORIE = '/sous2categorie';
+  static const PRODUCT_LIST = '/product-list';
+  static const SEARCH = '/search';
 }

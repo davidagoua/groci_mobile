@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -110,9 +111,11 @@ class PropositionCard extends GetView<ProductDetailController> {
         margin: const EdgeInsets.only(top: 5),
         child: HStack(
           [
-            Image.network(
-              proposition["boutique_id"]["image"],
-              width: 50,
+            CachedNetworkImage(
+                width: 50,
+                imageUrl: proposition["boutique_id"]["image"],
+                placeholder: (context, url)=> GFLoader(type: GFLoaderType.ios),
+                errorWidget: (context, url, error) => LineIcon.image(color: Colors.red)
             ).card.make(),
             "${proposition['prix']} fcfa"
                 .text
@@ -122,11 +125,14 @@ class PropositionCard extends GetView<ProductDetailController> {
                 .make(),
 
             HStack([
+              /*
               const LineIcon.shoppingBasket(
                 color: Vx.white,
               ).p(5).backgroundColor(Get.theme.primaryColor).onTap(
                       ()=> controller.addCommandeToBacket(proposition['id'])
               ).card.make(),
+
+               */
 
               const LineIcon.phone(
                 color: Vx.white,
@@ -151,9 +157,11 @@ class PropositionCard extends GetView<ProductDetailController> {
   void showBoutiqueContact(){
     Get.bottomSheet(VStack(key:Key(''),[
       HStack([
-        Image.network(
-          proposition["boutique_id"]["image"],
-          width: 90,
+        CachedNetworkImage(
+            width: 90,
+            imageUrl: proposition["boutique_id"]["image"],
+            placeholder: (context, url)=> GFLoader(type: GFLoaderType.ios),
+            errorWidget: (context, url, error) => LineIcon.image(color: Colors.red)
         ).card.make(),
         5.widthBox,
         VStack([

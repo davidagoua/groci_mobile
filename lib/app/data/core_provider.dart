@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Categorie {
   final int? id, parentId, generation;
@@ -29,31 +30,37 @@ class Categorie {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'parent_id': parentId,
-    'generation': generation,
-    'nom': nom,
-    'slug': slug,
-    'image': image,
-    'has_child': hasChild,
-  };
+        'id': id,
+        'parent_id': parentId,
+        'generation': generation,
+        'nom': nom,
+        'slug': slug,
+        'image': image,
+        'has_child': hasChild,
+      };
 
   @override
-  String toString() => 'Categorie(id: $id, nom: $nom, slug: $slug, generation: $generation)';
+  String toString() =>
+      'Categorie(id: $id, nom: $nom, slug: $slug, generation: $generation)';
 }
+
+final prefs = Get.find<SharedPreferences>(tag: 'prefs');
 
 class CoreProvider extends GetConnect {
   final Logger _logger = Logger();
+  String? ville;
 
   @override
-  void onInit() {
+  void onInit() async {
     httpClient.baseUrl = baseUrl;
-
+    this.ville = await prefs.getString('ville');
+    _logger.i(ville!);
   }
 
   Future<List<Categorie>> getAllCategories() async {
     try {
-      final response = await get('https://c-moinscher.ci/api/shop/all-categories');
+      final response =
+          await get('https://c-moinscher.ci/api/shop/all-categories');
 
       if (response.statusCode == 200) {
         final data = response.body as Map<String, dynamic>;
@@ -65,10 +72,12 @@ class CoreProvider extends GetConnect {
               .map((element) => Categorie.fromJson(element))
               .toList();
         } else {
-          throw Exception("The 'categories' key is not present in the response");
+          throw Exception(
+              "The 'categories' key is not present in the response");
         }
       } else {
-        throw Exception("Failed to retrieve categories: ${response.statusCode}");
+        throw Exception(
+            "Failed to retrieve categories: ${response.statusCode}");
       }
     } catch (e) {
       _logger.e('Error fetching categories');
@@ -76,7 +85,8 @@ class CoreProvider extends GetConnect {
     }
   }
 
-  Future<Response> getCategories() async => await get("https://c-moinscher.ci/api/shop/categories");
+  Future<Response> getCategories() async =>
+      await get("https://c-moinscher.ci/api/shop/categories");
 
   Future<Response> getProductsAlt({
     Map<String, dynamic>? filters,
@@ -84,7 +94,8 @@ class CoreProvider extends GetConnect {
     String? search,
     String? barcode,
   }) async {
-    String url = "https://c-moinscher.ci/api/shop/produits/";
+    this.ville = await prefs.getString('ville');
+    String url = "https://c-moinscher.ci/api/shop/produits/?ville=${this.ville}";
     final queryParams = <String, dynamic>{};
 
     if (categoryId != null) queryParams['categorie'] = categoryId;
@@ -94,11 +105,15 @@ class CoreProvider extends GetConnect {
     return await get(url, query: queryParams);
   }
 
-  Future<Response> getVilles() async => await get("https://c-moinscher.ci/api/shop/villes");
+  Future<Response> getVilles() async =>
+      await get("https://c-moinscher.ci/api/shop/villes");
 
-  Future<Response> getPropositions(int productId) async => await get("https://c-moinscher.ci/api/shop/produits/$productId/propositions");
+  Future<Response> getPropositions(int productId) async => await get(
+      "https://c-moinscher.ci/api/shop/produits/$productId/propositions?ville=${await prefs.getString('ville')}");
 
-  Future<Response> getProductByBarCode({String? barcode}) async => await get("https://c-moinscher.ci/api/shop/produits", query: {'code_barre': barcode});
+  Future<Response> getProductByBarCode({String? barcode}) async =>
+      await get("https://c-moinscher.ci/api/shop/produits",
+          query: {'code_barre': barcode});
 
   Future<Response> getResume(Map<String, dynamic> body) async {
     return await httpClient.post(
@@ -115,31 +130,41 @@ class CoreProvider extends GetConnect {
     );
   }
 
-  Future<Response<dynamic>> getProducts({Map<String, dynamic>? filters,
-  int? categorie=null, String? search, String? barcode, int? sous_sous_categorie_id = null
+  Future<Response<dynamic>> getProducts(
+      {Map<String, dynamic>? filters,
+      int? categorie = null,
+      String? search,
+      String? barcode,
+      int? sous_sous_categorie_id = null
   }) async {
     String url = "https://c-moinscher.ci/api/shop/produits/";
 
-    if(sous_sous_categorie_id != null){
+    if (sous_sous_categorie_id != null) {
       url = "$url?sous_sous_categorie_id=$sous_sous_categorie_id";
     }
 
-    if(categorie != null && sous_sous_categorie_id == null){
+    if (categorie != null && sous_sous_categorie_id == null) {
       url = "$url?categorie=$categorie";
     }
 
-    if(search != null && search.isNotEmpty){
+    if(categorie == null && sous_sous_categorie_id == null){
+      url = "${url}?";
+    }
+
+    if (search != null && search.isNotEmpty) {
       url = "$url&search=$search";
     }
 
-    if(barcode != null && barcode.isNotEmpty){
+    if (barcode != null && barcode.isNotEmpty) {
       url = "$url?barcode=$barcode";
     }
     Logger().d(url);
     return await get(url);
   }
 
-  Future<Response<dynamic>> getProductsFromParentCategorie(int categorie_id) async {
-    return await get("https://c-moinscher.ci/api/shop/categorie-parent/$categorie_id/produits");
+  Future<Response<dynamic>> getProductsFromParentCategorie(
+      int categorie_id) async {
+    return await get(
+        "https://c-moinscher.ci/api/shop/categorie-parent/$categorie_id/produits");
   }
 }

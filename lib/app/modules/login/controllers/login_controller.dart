@@ -4,16 +4,21 @@ import 'package:groci/app/routes/app_pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
-
   final formKey = GlobalKey<FormState>();
   final contactCtl = TextEditingController();
+  final ville = "".obs;
+  
 
-  void validate(){
-    if(formKey.currentState!.validate()){
+  void validate() {
+    if (formKey.currentState!.validate()) {
       login();
-    }else{
+    } else {}
+  }
 
-    }
+  Future<void> changeVille(String ville) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("ville", ville);
+    this.ville.value = ville;
   }
 
   @override

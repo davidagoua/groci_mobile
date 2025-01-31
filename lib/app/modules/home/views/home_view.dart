@@ -13,11 +13,13 @@ import 'package:getwidget/getwidget.dart';
 import 'package:groci/app/modules/Acceuil/views/acceuil_view.dart';
 import 'package:groci/app/modules/Categorie/views/categorie_view.dart';
 import 'package:groci/app/modules/profile/views/profile_view.dart';
-import 'package:groci/app/views/views/basket_view.dart';
+import 'package:groci/app/modules/Search/views/search_view.dart';
+import 'package:groci/app/modules/product_list/views/product_list_view.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:flutter_network_status/network_status.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -42,8 +44,8 @@ class HomeView extends GetView<HomeController> {
               index: controller.index.value,
               children: const [
                 CategorieView(),
-                AcceuilView(),
-                BasketView(),
+                ProductListView(),
+                SearchView(),
                 ProfileView(),
               ],
             ).expand()),
@@ -73,6 +75,8 @@ class HomeView extends GetView<HomeController> {
       items: [
         BottomBarItem(icon: Icon(Icons.menu_open), title: "Categories".text.make(), selectedColor: Get.theme.primaryColor),
         BottomBarItem(icon: LineIcon.home(), title: "Produits".text.make(), selectedColor: Get.theme.primaryColor),
+        BottomBarItem(icon: LineIcon.search(), title: "Recherche".text.make(), selectedColor: Get.theme.primaryColor),
+        /*
         BottomBarItem(
           icon: Obx(()=>GFIconBadge(
             counterChild: GFBadge(text: controller.basketController.commandes.keys.count().toString(),),
@@ -81,6 +85,7 @@ class HomeView extends GetView<HomeController> {
           title: "Panier".text.make(),
           selectedColor: Get.theme.primaryColor
         ),
+        */
         BottomBarItem(icon: LineIcon.user(), title: "Profile".text.make(), selectedColor: Get.theme.primaryColor),
       ],
       currentIndex: controller.index.value,

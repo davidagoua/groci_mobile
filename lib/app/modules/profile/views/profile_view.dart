@@ -79,7 +79,7 @@ class ProfileView extends GetView<ProfileController> {
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: HStack(
             [
-              Image.asset("images/amoirie.png").h(30),
+              Image.asset("images/amoirie.jpg").h(30),
               Image.asset("images/group.png").h(30)
             ],
             alignment: MainAxisAlignment.spaceBetween,

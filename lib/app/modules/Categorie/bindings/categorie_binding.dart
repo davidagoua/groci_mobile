@@ -8,5 +8,6 @@ class CategorieBinding extends Bindings {
     Get.lazyPut<CategorieController>(
       () => CategorieController(),
     );
+    
   }
 }
