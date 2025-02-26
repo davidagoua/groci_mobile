@@ -156,7 +156,7 @@ class CoreProvider extends GetConnect {
     }
 
     if (barcode != null && barcode.isNotEmpty) {
-      url = "$url?barcode=$barcode";
+      url = "${url}barcode=$barcode";
     }
     Logger().d(url);
     return await get(url);

@@ -72,7 +72,7 @@ class ProfileView extends GetView<ProfileController> {
 
         getContactCard(),
         10.heightBox,
-        "Copyright 2023 Tous droits reservé".text.size(7).color(Vx.gray500).make().centered(),
+        "Copyright ${DateTime.now().year} Tous droits reservé".text.size(7).color(Vx.gray500).make().centered(),
         10.heightBox,
 
         Container(
@@ -92,12 +92,13 @@ class ProfileView extends GetView<ProfileController> {
 
   Widget getContactCard(){
     return Container(
+      color: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: VStack([
         Icon(Icons.phone, size: 50, ),
         35.widthBox,
-        "+225 0000000".text.make(),
-        "info@c-moinscger.ci".text.make(),
+        "1343".text.white.make().p(3).card.elevation(0).green700.make(),
+        "info@c-moinscher.ci".text.make(),
         "c-moinscher.ci".text.make(),
       ], alignment: MainAxisAlignment.center, crossAlignment: CrossAxisAlignment.center,).w(double.maxFinite),
     );

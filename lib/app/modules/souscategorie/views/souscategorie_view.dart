@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:groci/app/modules/sous2categorie/controllers/sous2categorie_controller.dart';
 import 'package:line_icons/line_icon.dart';
 import '../controllers/souscategorie_controller.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -50,8 +51,17 @@ class SouscategorieView extends GetView<SouscategorieController> {
                     final categorie = controller.sousCategories[index];
                     return InkWell(
                       onTap: () {
-                        Get.toNamed(Routes.SOUS2CATEGORIE,
-                            arguments: {"categorie": categorie});
+                        try {
+                          final sous2CategoreController = Get.find<Sous2categorieController>();
+                          sous2CategoreController.selectedCategorie.value = categorie;
+                          sous2CategoreController.fetchSousCategories();
+                        } catch (e) {
+                          print(e);
+                        } finally {
+                          Get.toNamed(Routes.SOUS2CATEGORIE,
+                              arguments: {"categorie": categorie});
+                        }
+
                       },
                       child: ZoomIn(
                         child: Container(
@@ -63,6 +73,7 @@ class SouscategorieView extends GetView<SouscategorieController> {
                               BorderRadius.circular(7)),
                           child: VStack(
                             [
+
                               CachedNetworkImage(
                                   imageUrl: categorie["image"],
                                   placeholder: (context, url)=> GFLoader(type: GFLoaderType.ios),

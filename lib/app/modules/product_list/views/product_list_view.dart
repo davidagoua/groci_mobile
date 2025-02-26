@@ -19,7 +19,7 @@ class ProductListView extends GetView<ProductListController> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: VStack([
-        getHeader(),
+        getHeader(context),
 
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
@@ -30,9 +30,7 @@ class ProductListView extends GetView<ProductListController> {
               .bold
               .makeCentered(),
         ),
-        10.heightBox,
 
-        getSearchesBox(),
         10.heightBox,
         Expanded(
           child: getProduitsWidget(),
@@ -44,38 +42,29 @@ class ProductListView extends GetView<ProductListController> {
 
 
 
-  Widget getHeader(){
-    return Container(
-      child: VStack([
-         HStack(
-          [
-            Container(
-              child: Image.asset("images/amoirie.jpg"),
-            ).h(30),
-            Container(
-              child: Image.asset("images/group.png"),
-            ).h(30),
-
-          ],
-          alignment: MainAxisAlignment.spaceBetween,
-        ).w(double.maxFinite)
-        ,
-        5.heightBox,
-        Container(
-          child: Image.asset("images/logo.jpg"),
-        ).h(50),
-      ], crossAlignment: CrossAxisAlignment.center,).p(15).backgroundColor(Vx.white),
-    );
+  Widget getHeader(BuildContext context){
+    return VStack([
+      Navigator.canPop(context) ? HStack([
+        Icon(Icons.arrow_back).onTap(Get.back),
+        1.heightBox.expand()
+      ]) : 1.widthBox,
+      [
+        Image.asset("images/amoirie.jpg", height: 30,),
+        Image.asset("images/group.png", height: 30,),
+      ].hStack(alignment: MainAxisAlignment.spaceBetween).w(double.maxFinite)
+      ,
+      5.heightBox,
+      Image.asset("images/logo.jpg", height: 50,)
+    ], crossAlignment: CrossAxisAlignment.center).p(15).backgroundColor(Vx.white);
   }
 
   Widget getProductListCart(Map<String, dynamic> produit) {
     return BounceInDown(
-      child: Container(
-      key: Key("acceuil_product_${produit['id']}"),
-      color: Colors.white,
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
         leading: CachedNetworkImage(
+          width: 40,
+          height: 40,
           imageUrl: produit["image"],
           placeholder: (context, url)=> GFLoader(type: GFLoaderType.ios),
           errorWidget: (context, url, error) => LineIcon.image(color: Colors.red)
@@ -89,58 +78,32 @@ class ProductListView extends GetView<ProductListController> {
         ]),
       ).card.make().onTap(()  {
         Get.toNamed(Routes.PRODUCT_DETAIL, arguments: {"product": produit});
-      }),
-    )
-    );
-  }
-
-  Widget getSearchesBox() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child:  VStack([
-
-          Container(
-            child: TextField(
-              onChanged: (value) {
-                controller.search(value);
-                controller.fetchProducts();
-              },
-              decoration:  InputDecoration(
-                hintText: "Rechercher un produit...",
-
-                border: OutlineInputBorder(),
-              ),
-            )
-          )
-        ]),
+      })
     );
   }
 
   Widget getProduitsWidget() {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        color: Colors.grey[100],
-        transformAlignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 5),
-        child: Obx(() => controller.loading()
-            ? SizedBox(child: Lottie.asset("images/product_loading.json"),)
-            : AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                curve: Curves.fastOutSlowIn,
-                width: 0,
-                child: controller.products().isEmpty
-                    ? Container(
-                        child:
-                            "Aucun produits retrouvés".text.make().centered(),
-                      )
-                    : VStack(controller
-                            .products()
-                            .map((e) => getProductListCart(e))
-                            .toList())
-                        .scrollVertical(physics: BouncingScrollPhysics()),
-              )),
-      ).w(double.maxFinite),
-    );
+    return Container(
+      color: Colors.grey[100],
+      transformAlignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: Obx(() => controller.loading()
+          ? SizedBox(child: Lottie.asset("images/product_loading.json"),)
+          : AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.fastOutSlowIn,
+        width: 0,
+        child: controller.products().isEmpty
+            ? Container(
+          child:
+          "Aucun produits retrouvés".text.make().centered(),
+        )
+            : VStack(controller
+            .products()
+            .map((e) => getProductListCart(e))
+            .toList())
+            .scrollVertical(physics: BouncingScrollPhysics()),
+      )),
+    ).w(double.maxFinite);
   }
 }

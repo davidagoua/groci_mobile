@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:groci/app/controllers/basket_controller.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -37,5 +38,13 @@ class ProductDetailController extends GetxController {
 
   void addCommandeToBacket(int proposition_id){
     basketController.addCommande(proposition_id, count.value, product_name: product['nom']);
+  }
+
+  void showMarker({double latitude = 0, double longitude = 0, String boutique = ""}) async {
+    final availableMaps = await MapLauncher.installedMaps;
+    await availableMaps.first.showMarker(
+      coords: Coords(latitude, longitude),
+      title: boutique,
+    );
   }
 }

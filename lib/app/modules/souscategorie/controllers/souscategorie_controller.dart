@@ -42,9 +42,7 @@ class SouscategorieController extends GetxController {
         return sousCategories;
       } else {
         logger.e(response.body);
-        Get.showSnackbar(GetSnackBar(
-          message: "Erreur lors du chargement des sous-categories",
-        ));
+
       }
 
       return [];

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:groci/app/modules/sous2categorie/controllers/sous2categorie_controller.dart';
+import 'package:groci/app/modules/souscategorie/controllers/souscategorie_controller.dart';
 import 'package:groci/app/routes/app_pages.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -26,18 +28,26 @@ class CategorieView extends GetView<CategorieController> {
         child: VStack([
           getHeader(),
           Obx(()=>Container(
-              child: DropdownSearch<String>(
-            selectedItem: controller.ville.value,
-            items: (filter, infiniteScrollProps) => kVilles,
-            decoratorProps: DropDownDecoratorProps(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-              ),
-            ),
-            onChanged: (value) => controller.changeVille(value!),
-            popupProps: PopupProps.menu(
-                fit: FlexFit.loose, constraints: BoxConstraints()),
-          ))),
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              child: VStack([
+                'Ville actuelle'.text.gray600.italic.make(),
+                DropdownSearch<String>(
+                  selectedItem: controller.ville.value,
+                  items: (filter, infiniteScrollProps) => kVilles,
+                  decoratorProps: DropDownDecoratorProps(
+                    decoration: InputDecoration(
+                      prefixIcon: LineIcon.mapMarker(),
+                      border: InputBorder.none,
+                      suffixIcon: LineIcon.angleDown()
+                    ),
+                  ),
+                  onChanged: (value) => controller.changeVille(value!),
+                  popupProps: PopupProps.menu(
+                      fit: FlexFit.loose, constraints: BoxConstraints()),
+                )
+              ])
+          )),
           5.heightBox,
           Obx(
             () => controller.categories().isEmpty
@@ -61,7 +71,7 @@ class CategorieView extends GetView<CategorieController> {
                                 .map((e) => ZoomIn(
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 15, vertical: 5),
+                                            horizontal: 10, vertical: 5),
                                         decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius:
@@ -74,19 +84,23 @@ class CategorieView extends GetView<CategorieController> {
                                                 errorWidget: (context, url, error) => LineIcon.image(color: Colors.red)
                                             ).h(40),
                                             5.heightBox,
-                                            AutoSizeText(
-                                              "${e['nom']}",
-                                              maxLines: 2,
-                                              style: TextStyle(fontSize: 10),
-                                            ).centered()
+                                            Text("${e['nom']}", style: TextStyle(fontSize: 9), textAlign: TextAlign.center,),
                                           ],
                                           alignment: MainAxisAlignment.center,
                                           crossAlignment:
                                               CrossAxisAlignment.center,
                                         ),
-                                      ).cornerRadius(5).onTap(() => Get.toNamed(
-                                          Routes.SOUSCATEGORIE,
-                                          arguments: {"categorie": e}))
+                                      ).cornerRadius(5).onTap(() async {
+                                        try{
+                                          final sousCategorieController = Get.find<SouscategorieController>();
+                                          sousCategorieController.selectedCategorie.value = e;
+                                          await sousCategorieController.fetchSousCategories();
+                                        }catch(e){
+
+                                        }finally{
+                                          Get.toNamed(Routes.SOUSCATEGORIE, arguments: {"categorie": e});
+                                        }
+                                      })
                                       ,
                                     ))
                                 .toList(),
@@ -95,7 +109,7 @@ class CategorieView extends GetView<CategorieController> {
                         ])
                             .h(MediaQuery.of(context).size.height / 10 * 8.5)
                             .marginOnly(top: 5))
-                    .pOnly(bottom: 40),
+                    .pOnly(bottom: 60),
           ),
         ]).scrollVertical(physics: BouncingScrollPhysics()),
       ),

@@ -37,10 +37,15 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 .bold
                 .make(),
             5.heightBox,
-            Image.network(
-              controller.product["image"],
+            Image.network(controller.product["image"], height: 120,).centered()
+            /*
+            CachedNetworkImage(
+              imageUrl: ,
               height: 120,
+              placeholder: (context, url)=> GFLoader(type: GFLoaderType.ios),
+              errorWidget: (context, url, error) => LineIcon.image(color: Colors.red)
             ).centered()
+            */
           ]),
         ).backgroundColor(Vx.white).w(MediaQuery.of(context).size.width).h(MediaQuery.of(context).size.height / 10 * 2.5),
         Padding(
@@ -57,20 +62,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
             alignment: MainAxisAlignment.spaceBetween,
           ).w(double.maxFinite),
         ).backgroundColor(Vx.white),
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: HStack(
-            [
-              "Quantité".text.color(Vx.gray400).size(18).make(),
-              Obx(() => CounterButton(
-                    count: controller.count(),
-                    loading: false,
-                    onChange: controller.count,
-                  ))
-            ],
-            alignment: MainAxisAlignment.spaceBetween,
-          ).w(double.maxFinite),
-        ).backgroundColor(Vx.white),
+
         10.heightBox,
         "Vos boutiques".text.make().paddingAll(10),
         Container(
@@ -144,7 +136,15 @@ class PropositionCard extends GetView<ProductDetailController> {
               ).p(5).cornerRadius(7).backgroundColor(Get.theme.primaryColor).onTap(() {
                 var url =
                     "https://www.google.ci/maps/@${proposition['boutique_id']['lat']},${proposition['boutique_id']['lng']},12z?hl=fr&entry=ttu";
-                launchUrl(Uri.parse(url));
+                //launchUrl(Uri.parse(url));
+
+                controller.showMarker(
+                    boutique: proposition["boutique_id"]["nom"] as String,
+                    latitude: double.parse(proposition['boutique_id']['lat'])  ,
+                    longitude: double.parse(proposition['boutique_id']['lng']) ,
+
+                );
+
               }).card.make(),
             ])
           ],

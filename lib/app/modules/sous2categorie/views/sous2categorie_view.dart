@@ -76,11 +76,14 @@ class Sous2categorieView extends GetView<Sous2categorieController> {
                                 BorderRadius.circular(7)),
                             child: VStack(
                               [
+
                                 CachedNetworkImage(
                                     imageUrl: categorie["image"],
                                     placeholder: (context, url)=> GFLoader(type: GFLoaderType.ios),
                                     errorWidget: (context, url, error) => LineIcon.image(color: Colors.red)
                                 ).h(40),
+
+
                                 5.heightBox,
                                 "${categorie['nom']}"
                                     .text

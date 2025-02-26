@@ -19,6 +19,8 @@ class SearchView extends GetView<search.SearchController> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: VStack([
+        getHeader(),
+        5.heightBox,
         HStack([
           TextField(
             onChanged: (value) async =>controller.fetchProducts(searchQuery: value),
@@ -28,8 +30,6 @@ class SearchView extends GetView<search.SearchController> {
               hintText: "Rechercher un article..."
             ),
           ).expand(),
-          IconButton(onPressed: (){}, icon: LineIcon.filter()),
-          IconButton(onPressed: (){}, icon: LineIcon.sortAlphabeticalUp()),
         ]).card.elevation(0).roundedLg.gray100.make(),
         10.heightBox,
         getProduitsWidget()
@@ -56,9 +56,9 @@ class SearchView extends GetView<search.SearchController> {
                               "Aucun produits retrouvés".text.make().centered(),
                         )
                       : VStack(controller
-                              .searchResult()
-                              .map((e) => getProductListCart(e))
-                              .toList())
+                            .searchResult()
+                            .map((e) => getProductListCart(e))
+                            .toList())
                           .scrollVertical(physics: BouncingScrollPhysics()),
                 )),
         ).w(double.maxFinite),
@@ -73,9 +73,11 @@ class SearchView extends GetView<search.SearchController> {
         child: ListTile(
           contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
           leading: CachedNetworkImage(
-              imageUrl: produit["image"],
-              placeholder: (context, url)=> GFLoader(type: GFLoaderType.ios),
-              errorWidget: (context, url, error) => LineIcon.image(color: Colors.red)
+            height: 40,
+            width: 40,
+            imageUrl: produit["image"],
+            placeholder: (context, url)=> GFLoader(type: GFLoaderType.ios),
+            errorWidget: (context, url, error) => LineIcon.image(color: Colors.red)
           ).card.make(),
           title: "${produit['nom']}".text.bold.size(17).make(),
           subtitle: "${produit['unite']}".text.gray500.size(15).make(),
@@ -90,4 +92,28 @@ class SearchView extends GetView<search.SearchController> {
       )
       );
     }
+
+  Widget getHeader(){
+    return Container(
+      child: VStack([
+        HStack(
+          [
+            Container(
+              child: Image.asset("images/amoirie.jpg"),
+            ).h(30),
+            Container(
+              child: Image.asset("images/group.png"),
+            ).h(30),
+
+          ],
+          alignment: MainAxisAlignment.spaceBetween,
+        ).w(double.maxFinite)
+        ,
+        5.heightBox,
+        Container(
+          child: Image.asset("images/logo.jpg"),
+        ).h(50),
+      ], crossAlignment: CrossAxisAlignment.center,).p(15).backgroundColor(Vx.white),
+    );
+  }
 }

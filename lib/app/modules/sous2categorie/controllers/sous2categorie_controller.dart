@@ -5,7 +5,6 @@ import 'package:logger/logger.dart';
 final logger = Logger();
 
 class Sous2categorieController extends GetxController {
-  //TODO: Implement SouscategorieController
 
   final loading = false.obs;
   final RxMap selectedCategorie = {}.obs;
@@ -42,9 +41,6 @@ class Sous2categorieController extends GetxController {
         return sousCategories;
       } else {
         logger.e(response.body);
-        Get.showSnackbar(GetSnackBar(
-          message: "Erreur lors du chargement des sous-categories",
-        ));
       }
 
       return [];
@@ -52,8 +48,8 @@ class Sous2categorieController extends GetxController {
       logger.e(e, stackTrace: s);
       rethrow;
     } finally {
-        loading.value = false;
-      }
-    return [];
+      loading.value = false;
+    }
+
   }
 }

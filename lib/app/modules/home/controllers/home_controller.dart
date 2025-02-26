@@ -43,9 +43,7 @@ class HomeController extends GetxController {
         List produits = response.body['produits'];
 
         if( produits.isEmpty){
-          // show notification
-          //VxToast.show(Get.context!, msg: "Article indisponible");
-          Get.defaultDialog(title: "Produit Introuvable", radius: 10, content: "Désolé sur code barre ne correspond a aucun produit enrégistré !".text.center.make() );
+          Get.defaultDialog(title: "Produit Introuvable", radius: 10, content: "Désolé, ce code barre ne correspond à aucun produit enrégistré !".text.center.make() );
         }else{
           Get.toNamed(Routes.PRODUCT_DETAIL, arguments: {"product": produits[0]});
         }
@@ -53,7 +51,7 @@ class HomeController extends GetxController {
     }
     barcodeLoading.value = false;
   }
-  
+
   @override
   void onInit() {
     super.onInit();
