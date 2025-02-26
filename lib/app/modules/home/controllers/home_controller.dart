@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:groci/app/data/core_provider.dart';
 import 'package:groci/app/routes/app_pages.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:flutter/material.dart';
 import '../../../controllers/basket_controller.dart';
@@ -13,10 +14,9 @@ class HomeController extends GetxController {
   final barcodeLoading = false.obs;
   BasketController basketController = Get.find<BasketController>();
   final core_provider = CoreProvider();
+  late final SharedPreferences prefs ;
 
-  void scanBarCode() async{
-
-    // scanner le code barre
+  void _scanBarCode() async {
     String? barcodeScanRes = await SimpleBarcodeScanner.scanBarcode(
       Get.context!,
       barcodeAppBar: const BarcodeAppBar(
@@ -29,7 +29,7 @@ class HomeController extends GetxController {
       delayMillis: 500,
       cameraFace: CameraFace.back,
       scanFormat: ScanFormat.ONLY_BARCODE,
-      );
+    );
     barcodeLoading.value = true;
 
     // retrouver le le produit a partir de code barre
@@ -52,9 +52,30 @@ class HomeController extends GetxController {
     barcodeLoading.value = false;
   }
 
+  void scanBarCode() async{
+
+    if( prefs.getBool('firstBarcode') ?? false){
+      _scanBarCode();
+    }else{
+      Get.defaultDialog(
+        title: "Scanner le Code Barre",
+        middleText: "Pour trouver le meilleur prix, scannez simplement le code-barres du produit. Vous verrez immédiatement où il est disponible et à quel prix !",
+        barrierDismissible: true,
+        onConfirm: (){
+          Get.back();
+          _scanBarCode();
+        },
+
+      );
+    }
+
+    await prefs.setBool('firstBarcode', true);
+  }
+
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    prefs = await SharedPreferences.getInstance();
   }
 
   @override
